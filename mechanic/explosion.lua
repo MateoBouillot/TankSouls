@@ -5,11 +5,16 @@ local explosion = {}
     end
     explosion.list = {}
     explosion.img = {}
-    for i = 0, 8 do
-        local img = love.graphics.newImage("img/Explosion/explosion0".. i ..".png")
+    for i = 1, 5 do
+        local img = love.graphics.newImage("img/Explosion/explosion".. i ..".png")
         table.insert(explosion.img, img)
     end
-    explosion.frameRate = 60
+    explosion.SmokeImg = {}
+    for i = 1, 5 do
+        local img = love.graphics.newImage("img/Explosion/explosionSmoke".. i ..".png")
+        table.insert(explosion.SmokeImg, img)
+    end
+    explosion.frameRate = 20
 
     explosion.update = function(dt)
         for i = 1, #explosion.list do
@@ -17,7 +22,7 @@ local explosion = {}
             if explosion.list[i].time <= 0 then
                 explosion.list[i].imgNbr = explosion.list[i].imgNbr + 1
                 explosion.list[i].time = 1/explosion.frameRate
-                if explosion.list[i].imgNbr >= 10 then
+                if explosion.list[i].imgNbr >= 6 then
                     table.remove(explosion.list)
                 end
             end
@@ -36,7 +41,7 @@ local explosion = {}
     explosion.draw = function()
         for i = 1, #explosion.list do
             local d = explosion.list[i]
-            love.graphics.draw(explosion.img[d.imgNbr], d.x, d.y, 1, 0.3, 0.3, explosion.img[d.imgNbr]:getHeight() * 0.5, explosion.img[d.imgNbr]:getWidth() * 0.5)
+            love.graphics.draw(explosion.img[d.imgNbr], d.x, d.y, 1, 1.3, 1.3, explosion.img[d.imgNbr]:getHeight() * 0.5, explosion.img[d.imgNbr]:getWidth() * 0.5)
         end
     end
 
