@@ -1,6 +1,6 @@
 local tankimg = {}
-    tankimg.body = love.graphics.newImage("img/tank/tankGreen.png")
-    tankimg.turret = love.graphics.newImage("img/tank/barrelGreen.png")
+    tankimg.body = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer1.png")
+    tankimg.turret = love.graphics.newImage("/img/cannons/one tap cannons/base cannon.png")
     
 offset = {}
     offset.tankx = tankimg.body:getWidth() * 0.5
@@ -16,6 +16,7 @@ local tank = {}
     tank.rotspeed = math.pi
     tank.speed = 200
     tank.turretRot = 0
+    tank.cannonLength = tankimg.turret:getWidth()
 
     tank.init = function()
         tank.x = 640

@@ -15,12 +15,12 @@ local scene = {}
 local explosion = require("../mechanic/explosion")
 local tank = require("../mechanic/tank")
 local enemies = require("../mechanic/enemies")
-local bullet = require("../mechanic/bullets")
+local bullet = require("../mechanic/bullets/basicBullets")
 local score = 0
 
-function love.mousepressed(x, y, button)
-    bullet.create(x, y)
-end
+
+
+
 
 function CheckCollision(x1,y1,w1,h1, x2,y2,w2,h2)
     return x1 < x2+w2 and
@@ -39,6 +39,11 @@ scene.init = function(needInit)
 end
 
 scene.update = function(dt)
+
+    function love.mousepressed(x, y, button)
+        bullet.create(x, y, tank.x, tank.y)
+    end
+
     local mouseX, mouseY = love.mouse.getPosition()
     tank.aim(mouseX, mouseY)
 

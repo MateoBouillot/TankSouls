@@ -1,6 +1,6 @@
 local enemyimg = {}
-    enemyimg.tank = love.graphics.newImage("img/enemyTank/tankRed.png")
-    enemyimg.barrel = love.graphics.newImage("img/enemyTank/barrelRed.png")
+    enemyimg.tank = love.graphics.newImage("/img/enemies/sniper/sniperBody.png")
+    enemyimg.barrel = love.graphics.newImage("/img/enemies/sniper/sniperCanon.png")
 
 local offset = {}
     offset.tankX = enemyimg.tank:getWidth() * 0.5

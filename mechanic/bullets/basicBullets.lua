@@ -1,5 +1,5 @@
 local img = {}
-    img.greenBullet = love.graphics.newImage("img/tank/bulletGreenSilver.png")
+    img.greenBullet = love.graphics.newImage("/img/Bullets/basicBullets.png")
 
 local offset = {}
     offset.bulletx = img.greenBullet:getWidth() * 0.5
@@ -17,15 +17,17 @@ local bullet = {}
         bullet.timer = 0
     end
 
-    bullet.create = function(x, y)
+    bullet.create = function(x, y, tankx, tanky)
         if bullet.timer <= 0 then
-            local startX = tank.x
-            local startY = tank.y
+            
             local aimX = x
             local aimY = y
 
-            local angle = math.atan2((aimY - startY), (aimX - startX))
+            local angle = math.atan2((aimY - tanky), (aimX - tankx))
 
+            local startX = tankx + (tank.cannonLength * math.cos(angle))
+            local startY = tanky + (tank.cannonLength * math.sin(angle))
+            
             local bulletSpeedX = bullet.Speed * math.cos(angle)
             local bulletSpeedY = bullet.Speed * math.sin(angle)
 
