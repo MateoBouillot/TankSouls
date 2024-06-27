@@ -9,11 +9,6 @@ local explosion = {}
         local img = love.graphics.newImage("img/Explosion/explosion".. i ..".png")
         table.insert(explosion.img, img)
     end
-    explosion.SmokeImg = {}
-    for i = 1, 5 do
-        local img = love.graphics.newImage("img/Explosion/explosionSmoke".. i ..".png")
-        table.insert(explosion.SmokeImg, img)
-    end
     explosion.frameRate = 20
 
     explosion.update = function(dt)

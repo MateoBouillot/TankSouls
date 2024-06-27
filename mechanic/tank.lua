@@ -1,26 +1,29 @@
 local tankimg = {}
     tankimg.body = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer1.png")
-    tankimg.turret = love.graphics.newImage("/img/cannons/one tap cannons/base cannon.png")
+    tankimg.baseTurret = love.graphics.newImage("/img/cannons/oneTapCannons/baseCannon.png")
+    tankimg.fullAutoTurret = love.graphics.newImage("/img/cannons/autoCannons/autoCannon.png")
     
 offset = {}
     offset.tankx = tankimg.body:getWidth() * 0.5
     offset.tanky = tankimg.body:getHeight() * 0.5
     offset.turretx = 0
-    offset.turrety = tankimg.turret:getHeight() * 0.5 
+    offset.turrety = tankimg.baseTurret:getHeight() * 0.5 
 
 
 local tank = {}
-    tank.x = 640
-    tank.y = 364
+    tank.x = love.graphics.getWidth() * 0.5
+    tank.y = love.graphics.getHeight() * 0.5
     tank.rot = 0
     tank.rotspeed = math.pi
     tank.speed = 200
     tank.turretRot = 0
-    tank.cannonLength = tankimg.turret:getWidth()
+    tank.cannonLength = tankimg.baseTurret:getWidth()
+    tank.cannonType = "oneTap"
+    tank.cannonImg = tankimg.baseTurret
 
     tank.init = function()
-        tank.x = 640
-        tank.y = 364
+        tank.x = love.graphics.getWidth() * 0.5
+        tank.y = love.graphics.getHeight() * 0.5
         tank.rot = 0
         tank.rotspeed = math.pi
         tank.speed = 200
@@ -42,7 +45,7 @@ local tank = {}
 
     tank.draw = function()
         love.graphics.draw(tankimg.body, tank.x, tank.y, tank.rot, 1, 1, offset.tankx, offset.tanky)
-        love.graphics.draw(tankimg.turret, tank.x, tank.y, tank.turretRot, 1, 1, offset.turretx, offset.turrety)
+        love.graphics.draw(tank.cannonImg, tank.x, tank.y, tank.turretRot, 1, 1, offset.turretx, offset.turrety)
     end
 
 return tank

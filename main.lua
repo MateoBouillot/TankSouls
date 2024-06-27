@@ -1,4 +1,4 @@
-love.window.setMode(1280, 768)
+love.window.setMode(1920, 1080)
 
 require("/scene/SceneManager")
 
