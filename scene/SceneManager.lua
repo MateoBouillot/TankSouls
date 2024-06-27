@@ -3,7 +3,7 @@ scenes.GAME = require("/scene/GameScene")
 scenes.MENU = require("/scene/MenuScene")
 scenes.PAUSE = require("/scene/PauseScene")
 
-local currentScene = scenes.GAME
+local currentScene = scenes.MENU
 
 function changeScene(key, value)
     if currentScene ~= nil then

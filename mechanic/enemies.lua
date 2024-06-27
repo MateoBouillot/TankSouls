@@ -35,18 +35,18 @@ local enemies = {}
         enemies.spawnSide = math.random(1, 4)
         if enemies.spawnSide == 1 then
             enemy.x = 0 - 30
-            enemy.y = math.random(0, love.graphics.getHeight())
+            enemy.y = love.graphics.getHeight() * 0.5
             enemy.rot = 0
         elseif enemies.spawnSide == 2 then
             enemy.x = love.graphics.getWidth() + 30
-            enemy.y = math.random(0, love.graphics.getHeight())
+            enemy.y = love.graphics.getHeight() * 0.5
             enemy.rot = math.pi
         elseif enemies.spawnSide == 3 then
-            enemy.x = math.random(0, love.graphics.getWidth())
+            enemy.x = love.graphics.getWidth() * 0.5
             enemy.y = 0 - 30
             enemy.rot = math.pi * 0.5
         elseif enemies.spawnSide == 4 then
-            enemy.x = math.random(0, love.graphics.getWidth())
+            enemy.x = love.graphics.getWidth() * 0.5
             enemy.y = love.graphics.getHeight() + 30
             enemy.rot = 3 * math.pi * 0.5
         end
