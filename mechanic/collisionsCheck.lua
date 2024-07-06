@@ -11,8 +11,8 @@ local collisionCheck = {}
             for e = #enemyList, 1, -1 do
                 if CheckCollision(bullets[i].hitBox.x, bullets[i].hitBox.y, bullets[i].hitBox.W, bullets[i].hitBox.H,
                 enemyList[e].hitBox.x, enemyList[e].hitBox.y, enemyList[e].hitBox.W, enemyList[e].hitBox.H) then
-                    local collisionX = enemyList[e].hitBox.x + offset.tankx
-                    local collisionY = enemyList[e].hitBox.y + offset.tanky
+                    local collisionX = enemyList[e].hitBox.x + enemyList[e].hitBox.W * 0.5
+                    local collisionY = enemyList[e].hitBox.y + enemyList[e].hitBox.H * 0.5
                     explosion.create(collisionX, collisionY)
                     table.remove(bullets, i)
                     table.remove(enemyList, e)
@@ -22,8 +22,32 @@ local collisionCheck = {}
         end
     end
 
-    collisionCheck.tankBorder = function()
+    collisionCheck.tankBorder = function(tank, borderWidth)
+        if tank.x - tank.offsetX <= borderWidth then
+            tank.x = borderWidth + tank.offsetX    
+        elseif tank.x + tank.offsetX >= love.graphics.getWidth() - borderWidth then
+            tank.x = love.graphics.getWidth() - borderWidth - tank.offsetX
+        end
 
+        if tank.y - tank.offsetY <= borderWidth then
+            tank.y = borderWidth + tank.offsetY
+        elseif tank.y + tank.offsetY >= love.graphics.getHeight() - borderWidth then
+            tank.y = love.graphics.getHeight() - borderWidth - tank.offsetY
+        end
+
+        for i = 1, #enemyList do
+            if enemyList[i].x - (enemyList[i].hitBox.W * 0.5) <= borderWidth then
+                enemyList[i].x = borderWidth + (enemyList[i].hitBox.W * 0.5)    
+            elseif enemyList[i].x + (enemyList[i].hitBox.W * 0.5) >= love.graphics.getWidth() - borderWidth then
+                enemyList[i].x = love.graphics.getWidth() - borderWidth - (enemyList[i].hitBox.W * 0.5)
+            end
+    
+            if enemyList[i].y - (enemyList[i].hitBox.H * 0.5) <= borderWidth then
+                enemyList[i].y = borderWidth + (enemyList[i].hitBox.H * 0.5)
+            elseif enemyList[i].y + (enemyList[i].hitBox.H * 0.5) >= love.graphics.getHeight() - borderWidth then
+                enemyList[i].y = love.graphics.getHeight() - borderWidth - (enemyList[i].hitBox.H * 0.5)
+            end
+        end
     end
 
 return collisionCheck

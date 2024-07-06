@@ -22,10 +22,13 @@ scene.update = function(dt)
 
     bullet.update(dt)
     basicBullet.timerUpdate(dt)
+
+    collisionCheck.tankBorder(tank, background.crateImg:getWidth())
 end
 
 scene.draw = function()
-    background.draw()
+    local menu = true
+    background.draw(menu)
     bullet.draw()
     tank.draw()
 end

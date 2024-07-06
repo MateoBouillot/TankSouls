@@ -1,14 +1,19 @@
 local enemyimg = {}
-    enemyimg.tank = love.graphics.newImage("/img/enemies/sniper/sniperBody.png")
+    enemyimg.sniper = love.graphics.newImage("/img/enemies/sniper/sniperBody.png")
     enemyimg.barrel = love.graphics.newImage("/img/enemies/sniper/sniperCanon.png")
+    enemyimg.tnt = love.graphics.newImage("/img/enemies/small suicider/tnt.png")
+    enemyimg.suicider = love.graphics.newImage("/img/enemies/small suicider/smallEnemyBody.png")
 
 local offset = {}
-    offset.tankX = enemyimg.tank:getWidth() * 0.5
-    offset.tankY = enemyimg.tank:getHeight() * 0.5
+    offset.tankX = enemyimg.suicider:getWidth() * 0.5
+    offset.tankY = enemyimg.suicider:getHeight() * 0.5
     offset.barrelX = 0
     offset.barrelY = enemyimg.barrel:getHeight() * 0.5
+    offset.tntX = enemyimg.tnt:getWidth() * 0.5
+    offset.tntY = enemyimg.tnt:getHeight() * 0.5
 
 enemyList = {}
+local suicider = require("/mechanic/enemyTypes/Suicider")
 
 local enemies = {}
 
@@ -51,17 +56,18 @@ local enemies = {}
             enemy.rot = 3 * math.pi * 0.5
         end
 
+        enemy.specifics = suicider.spawn()
+
         enemy.hitBox = {}
-        enemy.hitBox.x = enemy.x - offset.tankX
-        enemy.hitBox.y = enemy.y - offset.tankY
-        enemy.hitBox.W = enemyimg.tank:getWidth()
-        enemy.hitBox.H = enemyimg.tank:getHeight()
+        enemy.hitBox.x = enemy.x - enemy.specifics.body:getWidth() * 0.5
+        enemy.hitBox.y = enemy.y - enemy.specifics.body:getHeight() * 0.5
+        enemy.hitBox.W = enemy.specifics.body:getWidth()
+        enemy.hitBox.H = enemy.specifics.body:getHeight()
 
         table.insert(enemyList, enemy)
     end
 
     enemies.update = function(dt)
-        
         for i = #enemyList, 1, -1 do
             enemyList[i].x = enemyList[i].x + enemies.speed * math.cos(enemyList[i].rot) * dt
             enemyList[i].y = enemyList[i].y + enemies.speed * math.sin(enemyList[i].rot) * dt
@@ -84,8 +90,8 @@ local enemies = {}
     enemies.draw = function()
         for i = 1, #enemyList do
             local e = enemyList[i]
-            love.graphics.draw(enemyimg.tank, e.x, e.y, e.rot, 0.9, 0.9, offset.tankX, offset.tankY)
-            love.graphics.draw(enemyimg.barrel, e.x, e.y, e.rot, 0.9, 0.9, offset.barrelX, offset.barrelY)
+            love.graphics.draw(enemyimg.suicider, e.x, e.y, e.rot, 0.9, 0.9, offset.tankX, offset.tankY)
+            love.graphics.draw(enemyimg.tnt, e.x, e.y, e.rot, 1.5, 1.5, offset.tntX, offset.tntY)
         end
     end
 return enemies

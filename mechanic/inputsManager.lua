@@ -7,6 +7,24 @@ local inputReading = {}
             tank.cannonType = "oneTap"
         elseif love.keyboard.isDown("kp2") then
             tank.cannonType = "fullAuto"
+        elseif love.keyboard.isDown("kp3") then
+            tank.cannonType = "rocket"
+        end
+
+        if love.keyboard.isDown("kp4") then
+            tank.level = 1
+        elseif love.keyboard.isDown("kp5") then
+            tank.level = 2
+        elseif love.keyboard.isDown("kp6") then
+            tank.level = 3
+        end
+
+        if love.keyboard.isDown("kp0") then
+            if tank.sideCannon == true then
+                tank.sideCannon = false
+            else 
+                tank.sideCannon = true
+            end
         end
     end
 
@@ -24,28 +42,48 @@ local inputReading = {}
         end
     end
 
-    local mouseIsDown = false
+    local mouse1Down = false
+    local mouse2Down = false
     
-    inputReading.aimingShooting = function(dt, tank, basicBullet, fullAutoBullet)
+    inputReading.aimingShooting = function(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons)
 
         local mouseX, mouseY = love.mouse.getPosition()
         tank.aim(mouseX, mouseY)
 
         if love.mouse.isDown(1) then
             if tank.cannonType == "oneTap" then
-                if mouseIsDown ~= true then 
+                if mouse1Down ~= true then 
                     basicBullet.create(mouseX, mouseY, tank.x, tank.y)
-                    mouseIsDown = true
                 end
             elseif tank.cannonType == "fullAuto" then
                 fullAutoBullet.create(mouseX, mouseY, tank.x, tank.y)
+            elseif tank.cannonType == "rocket" then
+                rocket.create(mouseX, mouseY, tank.x, tank.y)
+            end
+            mouse1Down = true
+        else
+            mouse1Down = false
+        end
+
+        if tank.sideCannon == true then
+            if love.mouse.isDown(2) then
+                if mouse2Down ~= true then 
+                    sideCannons.create(tank)
+                end
+                mouse2Down = true
+            else
+                mouse2Down = false
+            end
+        end
+
+        if love.mouse.isDown(3) then
+            if tank.cannonType == "rocket" then
+                if rocket.reloaded == false and rocket.reloading == false then
+                    rocket.reloading = true
+                    rocket.reloadTimer = rocket.reloadRate
+                end
             end
         end
     
-        function love.mousereleased(x, y, button)
-            if button == 1 then
-                mouseIsDown = false
-            end
-        end
     end
 return inputReading

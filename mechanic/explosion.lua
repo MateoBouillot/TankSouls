@@ -12,14 +12,11 @@ local explosion = {}
     explosion.frameRate = 20
 
     explosion.update = function(dt)
-        for i = 1, #explosion.list do
+        for i = #explosion.list, 1, -1 do
             explosion.list[i].time = explosion.list[i].time - dt
             if explosion.list[i].time <= 0 then
                 explosion.list[i].imgNbr = explosion.list[i].imgNbr + 1
                 explosion.list[i].time = 1/explosion.frameRate
-                if explosion.list[i].imgNbr >= 6 then
-                    table.remove(explosion.list)
-                end
             end
         end
     end
@@ -34,9 +31,12 @@ local explosion = {}
     end
 
     explosion.draw = function()
-        for i = 1, #explosion.list do
+        for i = #explosion.list, 1, -1  do
             local d = explosion.list[i]
             love.graphics.draw(explosion.img[d.imgNbr], d.x, d.y, 1, 1.3, 1.3, explosion.img[d.imgNbr]:getHeight() * 0.5, explosion.img[d.imgNbr]:getWidth() * 0.5)
+            if explosion.list[i].imgNbr == 5 then
+                table.remove(explosion.list)
+            end
         end
     end
 

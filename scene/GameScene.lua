@@ -5,6 +5,8 @@ local tank = require("../mechanic/tank")
 local enemies = require("../mechanic/enemies")
 local basicBullet = require("../mechanic/bulletTypes/basicBullets")
 local fullAutoBullet = require("/mechanic/bulletTypes/fullAutoBullets")
+local rocket = require("/mechanic/bulletTypes/rocket")
+local sideCannons = require("/mechanic/bulletTypes/sideCannons")
 local bullet = require("/mechanic/Bullets")
 local inputReading = require("/mechanic/inputsManager")
 local background = require("/mechanic/background")
@@ -18,23 +20,29 @@ scene.init = function(needInit)
     bullet.init()
     basicBullet.init()
     fullAutoBullet.init()
+    rocket.init()
+    sideCannons.init()
 end
 
 scene.update = function(dt)
 
     inputReading.movements(dt, tank.rotate, tank.move)
-    inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet)
+    inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons)
     inputReading.cannonSwitch(tank)
 
     bullet.update(dt)
     basicBullet.timerUpdate(dt)
     fullAutoBullet.timerUpdate(dt)
+    rocket.reloadUpdate(dt)
+    sideCannons.timerUpdate(dt)
+    tank.spriteUpdate()
 
     enemies.Spawning(dt)
     enemies.update(dt)
 
     explosion.update(dt)
     collisionCheck.bulletsTank(explosion, score)
+    collisionCheck.tankBorder(tank, background.crateImg:getWidth())
 end
 
 scene.draw = function()
