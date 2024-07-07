@@ -8,15 +8,36 @@ local offset = {}
     offset.tntX = suiciderImg.tnt:getWidth() * 0.5
     offset.tntY = suiciderImg.tnt:getHeight() * 0.5
 
+local spawnState = require("/mechanic/enemiesBaseState/spawnState")
+local patrolState = require("/mechanic/enemiesBaseState/patrolState")
+
 local suicider = {}
 
     suicider.spawn = function()
         local enemyType = {}
             enemyType.type = "suicider"
             enemyType.body = suiciderImg.body
+            enemyType.bodyOffsetX = offset.bodyX
+            enemyType.bodyOffsetY = offset.bodyY 
+            enemyType.bodyScale = 0.9
             enemyType.armament = suiciderImg.tnt
+            enemyType.armamentOffsetX = offset.tntX
+            enemyType.armamentOffsetY = offset.tntY
+            enemyType.armamentScale = 1.5
             enemyType.speed = 200
             enemyType.state = "spawning"
         return enemyType
     end
+
+    suicider.update = function(dt, enemy)
+        if enemy.specifics.state == "spawning" then
+            spawnState(dt, enemy)
+        elseif enemy.specifics.state == "patrol" then
+            patrolState(dt, enemy)
+        elseif enemy.specifics.state == "attack" then
+            suicider.attackState(dt, enemy)
+        end
+    end
+
+
 return suicider

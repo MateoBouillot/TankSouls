@@ -14,6 +14,8 @@ local offset = {}
 
 enemyList = {}
 local suicider = require("/mechanic/enemyTypes/Suicider")
+local sniper = require("/mechanic/enemyTypes/sniper")
+local big = require("/mechanic/enemyTypes/big")
 
 local enemies = {}
 
@@ -35,7 +37,7 @@ local enemies = {}
     end
     math.randomseed(os.time())
     enemies.spawn = function()
-       
+      if #enemyList == 5 then return end 
         local enemy = {}
         enemies.spawnSide = math.random(1, 4)
         if enemies.spawnSide == 1 then
@@ -55,8 +57,22 @@ local enemies = {}
             enemy.y = love.graphics.getHeight() + 30
             enemy.rot = 3 * math.pi * 0.5
         end
+        enemy.spawnSide = enemies.spawnSide
 
-        enemy.specifics = suicider.spawn()
+        enemy.target = {
+            isThere = false,
+            x = 0,
+            y = 0
+        }
+
+        enemy.spawnType = math.random(1, 3)
+        if enemy.spawnType == 1 then
+            enemy.specifics = suicider.spawn()
+        elseif enemy.spawnType == 2 then
+            enemy.specifics = sniper.spawn()
+        elseif enemy.spawnType == 3 then
+            enemy.specifics = big.spawn()
+        end
 
         enemy.hitBox = {}
         enemy.hitBox.x = enemy.x - enemy.specifics.body:getWidth() * 0.5
@@ -69,29 +85,24 @@ local enemies = {}
 
     enemies.update = function(dt)
         for i = #enemyList, 1, -1 do
-            enemyList[i].x = enemyList[i].x + enemies.speed * math.cos(enemyList[i].rot) * dt
-            enemyList[i].y = enemyList[i].y + enemies.speed * math.sin(enemyList[i].rot) * dt
-
-            enemyList[i].hitBox.x = enemyList[i].x - offset.tankX
-            enemyList[i].hitBox.y = enemyList[i].y - offset.tankY
-
-            enemies.randomRotTimer = enemies.randomRotTimer - dt
-            if enemies.randomRotTimer <= 0 then
-                enemyList[i].rot = enemyList[i].rot + math.random(-10, 10) * 0.01
-                enemies.randomRotTimer = enemies.randomRotTime
+            if enemyList[i].specifics.type == "suicider" then
+                suicider.update(dt, enemyList[i])
+            elseif enemyList[i].specifics.type == "sniper" then
+                sniper.update(dt, enemyList[i])
+            elseif enemyList[i].specifics.type == "big" then
+                big.update(dt, enemyList[i])
             end
 
-            if enemyList[i].x + offset.tankX > love.graphics.getWidth() + 100 or enemyList[i].x - offset.tankX < -100 or enemyList[i].y + offset.tankY > love.graphics.getHeight() + 100 or enemyList[i].y - offset.tankY < -100 then
-                table.remove(enemyList, i)
-            end
+            enemyList[i].hitBox.x = enemyList[i].x - enemyList[i].specifics.body:getWidth() * 0.5
+            enemyList[i].hitBox.y = enemyList[i].y - enemyList[i].specifics.body:getHeight() * 0.5
         end
     end
 
     enemies.draw = function()
         for i = 1, #enemyList do
             local e = enemyList[i]
-            love.graphics.draw(enemyimg.suicider, e.x, e.y, e.rot, 0.9, 0.9, offset.tankX, offset.tankY)
-            love.graphics.draw(enemyimg.tnt, e.x, e.y, e.rot, 1.5, 1.5, offset.tntX, offset.tntY)
+            love.graphics.draw(e.specifics.body, e.x, e.y, e.rot, e.specifics.bodyScale, e.specifics.bodyScale, e.specifics.bodyOffsetX, e.specifics.bodyOffsetY)
+            love.graphics.draw(e.specifics.armament, e.x, e.y, e.rot, e.specifics.armamentScale, e.specifics.armamentScale, e.specifics.armamentOffsetX, e.specifics.armamentOffsetY)
         end
     end
 return enemies

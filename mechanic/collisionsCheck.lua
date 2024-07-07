@@ -36,16 +36,18 @@ local collisionCheck = {}
         end
 
         for i = 1, #enemyList do
-            if enemyList[i].x - (enemyList[i].hitBox.W * 0.5) <= borderWidth then
-                enemyList[i].x = borderWidth + (enemyList[i].hitBox.W * 0.5)    
-            elseif enemyList[i].x + (enemyList[i].hitBox.W * 0.5) >= love.graphics.getWidth() - borderWidth then
-                enemyList[i].x = love.graphics.getWidth() - borderWidth - (enemyList[i].hitBox.W * 0.5)
-            end
-    
-            if enemyList[i].y - (enemyList[i].hitBox.H * 0.5) <= borderWidth then
-                enemyList[i].y = borderWidth + (enemyList[i].hitBox.H * 0.5)
-            elseif enemyList[i].y + (enemyList[i].hitBox.H * 0.5) >= love.graphics.getHeight() - borderWidth then
-                enemyList[i].y = love.graphics.getHeight() - borderWidth - (enemyList[i].hitBox.H * 0.5)
+            if enemyList[i].specifics.state ~= "spawning" then
+                if enemyList[i].x - (enemyList[i].hitBox.W * 0.5) <= borderWidth then
+                    enemyList[i].x = borderWidth + (enemyList[i].hitBox.W * 0.5)    
+                elseif enemyList[i].x + (enemyList[i].hitBox.W * 0.5) >= love.graphics.getWidth() - borderWidth then
+                    enemyList[i].x = love.graphics.getWidth() - borderWidth - (enemyList[i].hitBox.W * 0.5)
+                end
+        
+                if enemyList[i].y - (enemyList[i].hitBox.H * 0.5) <= borderWidth then
+                    enemyList[i].y = borderWidth + (enemyList[i].hitBox.H * 0.5)
+                elseif enemyList[i].y + (enemyList[i].hitBox.H * 0.5) >= love.graphics.getHeight() - borderWidth then
+                    enemyList[i].y = love.graphics.getHeight() - borderWidth - (enemyList[i].hitBox.H * 0.5)
+                end
             end
         end
     end
