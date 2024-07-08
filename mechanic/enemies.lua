@@ -65,13 +65,15 @@ local enemies = {}
             y = 0
         }
 
+        enemy.turretRot = enemy.rot
+
         enemy.spawnType = math.random(1, 3)
         if enemy.spawnType == 1 then
             enemy.specifics = suicider.spawn()
         elseif enemy.spawnType == 2 then
-            enemy.specifics = sniper.spawn()
-        elseif enemy.spawnType == 3 then
             enemy.specifics = big.spawn()
+        elseif enemy.spawnType == 3 then
+            enemy.specifics = sniper.spawn()
         end
 
         enemy.hitBox = {}
@@ -83,14 +85,14 @@ local enemies = {}
         table.insert(enemyList, enemy)
     end
 
-    enemies.update = function(dt)
+    enemies.update = function(dt, tank)
         for i = #enemyList, 1, -1 do
             if enemyList[i].specifics.type == "suicider" then
-                suicider.update(dt, enemyList[i])
+                suicider.update(dt, enemyList[i], tank)
             elseif enemyList[i].specifics.type == "sniper" then
-                sniper.update(dt, enemyList[i])
+                sniper.update(dt, enemyList[i], tank)
             elseif enemyList[i].specifics.type == "big" then
-                big.update(dt, enemyList[i])
+                big.update(dt, enemyList[i], tank)
             end
 
             enemyList[i].hitBox.x = enemyList[i].x - enemyList[i].specifics.body:getWidth() * 0.5
@@ -102,7 +104,7 @@ local enemies = {}
         for i = 1, #enemyList do
             local e = enemyList[i]
             love.graphics.draw(e.specifics.body, e.x, e.y, e.rot, e.specifics.bodyScale, e.specifics.bodyScale, e.specifics.bodyOffsetX, e.specifics.bodyOffsetY)
-            love.graphics.draw(e.specifics.armament, e.x, e.y, e.rot, e.specifics.armamentScale, e.specifics.armamentScale, e.specifics.armamentOffsetX, e.specifics.armamentOffsetY)
+            love.graphics.draw(e.specifics.armament, e.x, e.y, e.turretRot, e.specifics.armamentScale, e.specifics.armamentScale, e.specifics.armamentOffsetX, e.specifics.armamentOffsetY)
         end
     end
 return enemies

@@ -20,7 +20,7 @@ local rocket = {}
 
     rocket.create = function(x, y, tankX, tankY)
         if rocket.reloaded == true then
-            bullet.create(x, y, tankX, tankY, rocket.speed, offset, img.greenRocket)
+            bullet.create(x, y, tankX, tankY, rocket.speed, offset, img.greenRocket, "rocket")
             rocket.reloaded = false
         end
     end

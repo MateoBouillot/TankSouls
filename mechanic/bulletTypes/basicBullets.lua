@@ -18,7 +18,7 @@ local basicBullet = {}
 
     basicBullet.create = function(x, y, tankx, tanky)
         if basicBullet.timer <= 0 then
-            bullet.create(x, y, tankx, tanky, basicBullet.speed, offset, img.greenBullet)
+            bullet.create(x, y, tankx, tanky, basicBullet.speed, offset, img.greenBullet, "basicBullet")
             basicBullet.timer = basicBullet.shootRate
         end
     end

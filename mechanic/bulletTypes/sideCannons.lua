@@ -22,29 +22,29 @@ local sideCannons = {}
             if tank.level == 3 then 
                 bullet.create(tank.x + math.cos(tank.rot + math.pi * 0.25),
                     tank.y + math.sin(tank.rot + math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
 
                 bullet.create(tank.x + math.cos(tank.rot - math.pi * 0.25),
                     tank.y + math.sin(tank.rot - math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
 
                 bullet.create(tank.x + math.cos(tank.rot - 3 * math.pi * 0.25),
                     tank.y + math.sin(tank.rot - 3 * math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
 
                 bullet.create(tank.x + math.cos(tank.rot + 3 * math.pi * 0.25),
                     tank.y + math.sin(tank.rot + 3 * math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
                 sideCannons.timer = sideCannons.shootRate
 
             elseif tank.level == 2 then
                 bullet.create(tank.x + math.cos(tank.rot + math.pi * 0.25),
                     tank.y + math.sin(tank.rot + math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
 
                 bullet.create(tank.x + math.cos(tank.rot - math.pi * 0.25),
                     tank.y + math.sin(tank.rot - math.pi * 0.25), 
-                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet)
+                    tank.x, tank.y, sideCannons.speed, offset, img.greenFullAutoBullet, "fullAuto")
                 sideCannons.timer = sideCannons.shootRate 
             end
         end

@@ -1,4 +1,4 @@
-local patrolState = function(dt, enemy)
+local patrolState = function(dt, enemy, tank)
     math.randomseed(os.time())
 
     local targets = {}
@@ -37,6 +37,7 @@ local patrolState = function(dt, enemy)
         end
         print(target)
     end
+
     local direction = 1
     local rotAim = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
     if rotAim < enemy.rot then direction = -1 end
@@ -50,6 +51,24 @@ local patrolState = function(dt, enemy)
         enemy.target.isThere = false
     else
         enemy.rot = enemy.rot + math.pi * dt * direction
+    end
+    enemy.turretRot = enemy.rot
+
+    local viewDistance
+    if enemy.specifics.type == "suicider" then
+        viewDistance = 400
+    elseif enemy.specifics.type == "sniper" then
+        viewDistance = 800
+    elseif enemy.specifics.type == "big" then
+        viewDistance = 600
+    end
+
+    local tankDir = math.atan2(tank.y - enemy.y, tank.x - enemy.x)
+    local tankDistance = ((tank.y - enemy.y)^2 + (tank.x - enemy.x)^2)^0.5
+    if tankDir >= rotAim - math.pi * 0.25 and tankDir <= rotAim + math.pi * 0.25 and tankDistance <= viewDistance then
+        enemy.specifics.state = "attack"
+    elseif tankDistance <= 200 then
+        enemy.specifics.state = "attack"
     end
 end
 

@@ -7,7 +7,7 @@ local bullet = {}
         bullets = {}
     end
 
-    bullet.create = function(aimX, aimY, tankx, tanky, bulletSpeed, offset, bulletType)
+    bullet.create = function(aimX, aimY, tankx, tanky, bulletSpeed, offset, bulletImg, bulletType)
             local angle = math.atan2((aimY - tanky), (aimX - tankx))
 
             local startX = tankx + (tank.cannonLength * math.cos(angle))
@@ -19,8 +19,8 @@ local bullet = {}
             local hitBox = {}
             hitBox.x = startX - offset.bulletx
             hitBox.y = startY - offset.bullety
-            hitBox.W = bulletType:getWidth()
-            hitBox.H = bulletType:getHeight()
+            hitBox.W = bulletImg:getWidth()
+            hitBox.H = bulletImg:getHeight()
 
             table. insert(bullets, {x = startX, 
                 y = startY, 
@@ -28,8 +28,9 @@ local bullet = {}
                 speedY = bulletSpeedY, 
                 angle = angle, 
                 hitBox = hitBox, 
-                bulletType = bulletType,
-                offset = offset
+                bulletImg = bulletImg,
+                offset = offset,
+                bulletType = bulletType
             })
     end
 
@@ -53,7 +54,7 @@ local bullet = {}
 
     bullet.draw = function()
         for i = 1, #bullets do
-            love.graphics.draw(bullets[i].bulletType, bullets[i].x, bullets[i].y, bullets[i].angle, 1, 1, bullets[i].offset.bulletx, bullets[i].offset.bullety)
+            love.graphics.draw(bullets[i].bulletImg, bullets[i].x, bullets[i].y, bullets[i].angle, 1, 1, bullets[i].offset.bulletx, bullets[i].offset.bullety)
         end
     end
 

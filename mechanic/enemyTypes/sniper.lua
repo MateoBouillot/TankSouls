@@ -29,13 +29,38 @@ local sniper = {}
         return enemyType
     end
 
-    sniper.update = function(dt, enemy)
+    sniper.update = function(dt, enemy, tank)
         if enemy.specifics.state == "spawning" then
             spawnState(dt, enemy)
         elseif enemy.specifics.state == "patrol" then
-            patrolState(dt, enemy)
+            patrolState(dt, enemy, tank)
         elseif enemy.specifics.state == "attack" then
-            sniper.attackState(dt, enemy)
+            sniper.attackState(dt, enemy, tank)
+        end
+    end
+
+    sniper.attackState = function(dt, enemy, tank)
+        enemy.target.isThere = true
+        enemy.target.x = tank.x
+        enemy.target.y = tank.y
+        local direction = 1
+
+        enemy.turretRot = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
+        local tankDistance = ((tank.y - enemy.y)^2 + (tank.x - enemy.x)^2)^0.5
+        if enemy.turretRot < enemy.rot then direction = -1 end
+
+        if tankDistance <= 600 then
+            enemy.rot = enemy.rot + math.pi * dt * direction
+            enemy.x = enemy.x + enemy.specifics.speed * math.cos(enemy.rot) * dt * -1
+            enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt * -1
+        elseif tankDistance <= 600 and enemy.rot >= enemy.turretRot - (math.pi * 0.05) and enemy.rot <= enemy.turretRot + (math.pi * 0.05) then
+            enemy.rot = enemy.turretRot
+            enemy.x = enemy.x + enemy.specifics.speed * math.cos(enemy.rot) * dt * -1
+            enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt * -1
+        elseif tankDistance >= 800 then
+            enemy.rot = enemy.turretRot
+            enemy.x = enemy.x + enemy.specifics.speed * math.cos(enemy.rot) * dt
+            enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt
         end
     end
 

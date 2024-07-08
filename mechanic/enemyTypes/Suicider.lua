@@ -29,14 +29,25 @@ local suicider = {}
         return enemyType
     end
 
-    suicider.update = function(dt, enemy)
+    suicider.update = function(dt, enemy, tank)
         if enemy.specifics.state == "spawning" then
             spawnState(dt, enemy)
         elseif enemy.specifics.state == "patrol" then
-            patrolState(dt, enemy)
+            patrolState(dt, enemy, tank)
         elseif enemy.specifics.state == "attack" then
-            suicider.attackState(dt, enemy)
+            suicider.attackState(dt, enemy, tank)
         end
+    end
+
+    suicider.attackState = function(dt, enemy, tank)
+        enemy.target.isThere = true
+        enemy.target.x = tank.x
+        enemy.target.y = tank.y
+
+        enemy.rot = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
+        enemy.x = enemy.x + enemy.specifics.speed * math.cos(enemy.rot) * dt
+        enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt
+        enemy.turretRot = enemy.rot
     end
 
 

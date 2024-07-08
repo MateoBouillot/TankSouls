@@ -42,10 +42,25 @@ local inputReading = {}
         end
     end
 
+    inputReading.abilities = function(dt, startRoll, tankRot, tankX, tankY, landMine)
+        if love.keyboard.isDown("lshift") then
+            if love.keyboard.isDown("z") then
+                startRoll("z", tankRot)
+            elseif love.keyboard.isDown("s") then
+                startRoll("s", tankRot)
+            end
+        end
+
+        if love.keyboard.isDown("e") then
+            landMine.create(tankX, tankY)
+        end
+
+    end
+
     local mouse1Down = false
     local mouse2Down = false
     
-    inputReading.aimingShooting = function(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons)
+    inputReading.aimingShooting = function(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons, tpShot)
 
         local mouseX, mouseY = love.mouse.getPosition()
         tank.aim(mouseX, mouseY)
@@ -74,6 +89,10 @@ local inputReading = {}
             else
                 mouse2Down = false
             end
+        end
+
+        if love.keyboard.isDown("a") then
+            tpShot.create(mouseX, mouseY, tank.x, tank.y)
         end
 
         if love.mouse.isDown(3) then
