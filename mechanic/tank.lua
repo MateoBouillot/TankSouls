@@ -34,6 +34,12 @@ local tank = {}
 
     tank.sideCannon = false
     tank.level = 1
+    tank.hp = 70
+
+    tank.hitBoxX = tank.x - tank.offsetX
+    tank.hitBoxY = tank.y - tank.offsetY
+    tank.hitBoxW = tank.sprite:getWidth()
+    tank.hitBoxH = tank.sprite:getHeight()
 
     tank.init = function()
         tank.x = love.graphics.getWidth() * 0.5
@@ -91,6 +97,9 @@ local tank = {}
     tank.move = function(dt, direction)
         tank.x = tank.x + tank.speed * math.cos(tank.rot) * dt * direction 
         tank.y = tank.y + tank.speed * math.sin(tank.rot) * dt * direction
+
+        tank.hitBoxX = tank.x - tank.offsetX
+        tank.hitBoxY = tank.y - tank.offsetY
     end
 
     tank.aim = function(x, y)

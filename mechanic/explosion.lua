@@ -1,4 +1,5 @@
 local tpShot = require("/mechanic/abilities/tpShot")
+local collisionCheck = require("/mechanic/collisionsCheck")
 local explosion = {}
 
     explosion.init = function()
@@ -6,10 +7,16 @@ local explosion = {}
     end
     explosion.list = {}
 
-    explosionImg = {}
+    local explosionImg = {}
     for i = 1, 5 do
         local img = love.graphics.newImage("img/Explosion/explosion".. i ..".png")
         table.insert(explosionImg, img)
+    end
+
+    local smokeImg = {}
+    for i = 1, 5 do
+        local img = love.graphics.newImage("img/Explosion/explosionSmoke".. i ..".png")
+        table.insert(smokeImg, img)
     end
 
     local bluePortals = {}
@@ -36,20 +43,23 @@ local explosion = {}
         end
     end
 
-    explosion.create = function(x, y, type, tankx, tanky)
+    explosion.create = function(x, y, type, tank, tankx, tanky)
         local explo = {}
         if type == "basicBullet" then
             explo.scale = 0.6
             explo.img = explosionImg
             explo.type = "explosion"
+            explo.damage = 20
         elseif type == "fullAuto" then
             explo.scale = 0.3
             explo.img = explosionImg
             explo.type = "explosion"
+            explo.damage = 2
         elseif type == "rocket" then
             explo.scale = 1.5
             explo.img = explosionImg
             explo.type = "explosion"
+            explo.damage = 40
         elseif type == "tpShot" then
             explo.scale = 1.5
             explo.img = orangePortals
@@ -60,13 +70,35 @@ local explosion = {}
             explo.scale = 2
             explo.img = explosionImg
             explo.type = "explosion"
+            explo.damage = 40
+        elseif type == "tnt" then
+            explo.scale = 1.7
+            explo.img = explosionImg
+            explo.type = "enemyExplosion"
+            explo.damage = 40
+        elseif type == "sniperBullets" then
+            explo.scale = 1
+            explo.img = explosionImg
+            explo.type = "enemyExplosion"
+            explo.damage = 30
+        elseif type == "bigBullets" then
+            explo.scale = 1.3
+            explo.img = explosionImg
+            explo.type = "enemyExplosion"
+            explo.damage = 20
+        elseif type == "death" then
+            explo.scale = 1.5
+            explo.img = smokeImg
+            explo.type = "death"
         end
         explo.x = x
         explo.y = y
         explo.imgNbr = 1
         explo.time = 1/explosion.frameRate
+        collisionCheck.explosionDamage(explo, tank)
         table.insert(explosion.list, explo)
     end
+
 
     explosion.draw = function()
         for i = #explosion.list, 1, -1  do

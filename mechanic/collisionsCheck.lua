@@ -16,15 +16,24 @@ local collisionCheck = {}
                 enemyList[e].hitBox.x, enemyList[e].hitBox.y, enemyList[e].hitBox.W, enemyList[e].hitBox.H) then
                     local collisionX = bullets[i].hitBox.x + bullets[i].hitBox.W * 0.5
                     local collisionY = bullets[i].hitBox.y + bullets[i].hitBox.H * 0.5
-                    explosion.create(collisionX, collisionY, bullets[i].bulletType, tank.x, tank.y)
+
+                    explosion.create(collisionX, collisionY, bullets[i].bulletType, tank, tank.x, tank.y)
                     if bullets[i].bulletType == "tpShot" then
                         tpShot.teleport("enemy", tank, enemyList[e].x, enemyList[e].y, enemyList[e])
-                    else
-                        table.remove(enemyList, e)
                     end
                     table.remove(bullets, i)
                     return
                 end
+            end
+        end
+        for i = #enemiesBullets, 1, -1 do
+            if CheckCollision(enemiesBullets[i].hitBox.x, enemiesBullets[i].hitBox.y, enemiesBullets[i].hitBox.W, 
+            enemiesBullets[i].hitBox.H, tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
+                local collisionX = enemiesBullets[i].hitBox.x + enemiesBullets[i].hitBox.W * 0.5
+                local collisionY = enemiesBullets[i].hitBox.y + enemiesBullets[i].hitBox.H * 0.5
+
+                explosion.create(collisionX, collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                table.remove(enemiesBullets, i)
             end
         end
     end
@@ -91,6 +100,53 @@ local collisionCheck = {}
                 table.remove(bullets, i)
             end
         end
+
+        for i = #enemiesBullets, 1, -1 do
+            local collisionX = enemiesBullets[i].hitBox.x + enemiesBullets[i].hitBox.W * 0.5
+            local collisionY = enemiesBullets[i].hitBox.y + enemiesBullets[i].hitBox.H * 0.5
+
+            if enemiesBullets[i].x - (enemiesBullets[i].hitBox.W * 0.5) <= borderWidth then
+                explosion.create(collisionX,collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                table.remove(enemiesBullets, i)
+
+            elseif enemiesBullets[i].x + (enemiesBullets[i].hitBox.W * 0.5) >= love.graphics.getWidth() - borderWidth then
+                explosion.create(collisionX,collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                table.remove(enemiesBullets, i)
+
+            elseif enemiesBullets[i].y - (enemiesBullets[i].hitBox.H * 0.5) <= borderWidth then
+                explosion.create(collisionX,collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                table.remove(enemiesBullets, i)
+
+            elseif enemiesBullets[i].y + (enemiesBullets[i].hitBox.H * 0.5) >= love.graphics.getHeight() - borderWidth then
+                explosion.create(collisionX,collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                table.remove(enemiesBullets, i)
+            end
+        end
     end 
+
+    collisionCheck.explosionDamage = function(explo, tank)
+        local baseExploHitBoxW = 100
+        local baseExploHitBoxH = 100
+
+        local exploHitBox = {}
+            exploHitBox.W =  baseExploHitBoxW * explo.scale
+            exploHitBox.H =  baseExploHitBoxH * explo.scale
+            exploHitBox.x = explo.x - exploHitBox.W * 0.5
+            exploHitBox.y = explo.y - exploHitBox.H * 0.5
+
+        if explo.type == "enemyExplosion" then
+            if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
+            tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
+                tank.hp = tank.hp - explo.damage
+            end
+        elseif explo.type == "explosion" then
+            for i = 1, #enemyList do
+                if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
+                enemyList[i].hitBox.x, enemyList[i].hitBox.y, enemyList[i].hitBox.W, enemyList[i].hitBox.H) then
+                    enemyList[i].specifics.hp = enemyList[i].specifics.hp - explo.damage
+                end
+            end
+        end
+    end
 
 return collisionCheck

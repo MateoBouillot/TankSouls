@@ -10,6 +10,7 @@ local offset = {}
 
 local spawnState = require("/mechanic/enemiesBaseState/spawnState")
 local patrolState = require("/mechanic/enemiesBaseState/patrolState")
+local enemyBullets = require("/mechanic/bulletTypes/enemyBullets")
 
 local sniper = {}
 
@@ -26,6 +27,9 @@ local sniper = {}
             enemyType.armamentScale = 1
             enemyType.speed = 150
             enemyType.state = "spawning"
+            enemyType.hp = 30
+            enemyType.damage = 30
+            enemyType.maxHp = 30
         return enemyType
     end
 
@@ -39,11 +43,16 @@ local sniper = {}
         end
     end
 
+    sniper.attackTimer = 0
+
     sniper.attackState = function(dt, enemy, tank)
+        math.randomseed(os.time())
         enemy.target.isThere = true
         enemy.target.x = tank.x
         enemy.target.y = tank.y
         local direction = 1
+
+        sniper.attackTimer = sniper.attackTimer - dt
 
         enemy.turretRot = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
         local tankDistance = ((tank.y - enemy.y)^2 + (tank.x - enemy.x)^2)^0.5
@@ -61,6 +70,11 @@ local sniper = {}
             enemy.rot = enemy.turretRot
             enemy.x = enemy.x + enemy.specifics.speed * math.cos(enemy.rot) * dt
             enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt
+        end
+
+        if sniper.attackTimer <= 0 then
+            sniper.attackTimer = math.random(200, 400) * 0.01
+            enemyBullets.sniper(tank.x, tank.y, enemy.x, enemy.y)
         end
     end
 

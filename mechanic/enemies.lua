@@ -85,7 +85,7 @@ local enemies = {}
         table.insert(enemyList, enemy)
     end
 
-    enemies.update = function(dt, tank)
+    enemies.update = function(dt, tank, explosion)
         for i = #enemyList, 1, -1 do
             if enemyList[i].specifics.type == "suicider" then
                 suicider.update(dt, enemyList[i], tank)
@@ -97,6 +97,16 @@ local enemies = {}
 
             enemyList[i].hitBox.x = enemyList[i].x - enemyList[i].specifics.body:getWidth() * 0.5
             enemyList[i].hitBox.y = enemyList[i].y - enemyList[i].specifics.body:getHeight() * 0.5
+
+            if enemyList[i].specifics.exploded then
+                explosion.create(enemyList[i].x, enemyList[i].y, "tnt", tank)
+                table.remove(enemyList, i)
+            end
+
+            if enemyList[i].specifics.hp <= 0 then
+                explosion.create(enemyList[i].x, enemyList[i].y, "death")
+                table.remove(enemyList, i)
+            end
         end
     end
 

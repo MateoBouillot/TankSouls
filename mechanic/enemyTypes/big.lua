@@ -10,6 +10,7 @@ local offset = {}
 
 local spawnState = require("/mechanic/enemiesBaseState/spawnState")
 local patrolState = require("/mechanic/enemiesBaseState/patrolState")
+local enemyBullets = require("/mechanic/bulletTypes/enemyBullets")
 
 local big = {}
 
@@ -26,6 +27,9 @@ local big = {}
             enemyType.armamentScale = 1.3
             enemyType.speed = 100
             enemyType.state = "spawning"
+            enemyType.hp = 50
+            enemyType.damage = 20
+            enemyType.maxHp = 50
         return enemyType
     end
 
@@ -39,11 +43,17 @@ local big = {}
         end
     end
 
+    big.attackTimer = 0
+
     big.attackState = function(dt, enemy, tank)
+        math.randomseed(os.time())
         enemy.target.isThere = true
         enemy.target.x = tank.x
         enemy.target.y = tank.y
         local direction = 1
+        
+
+        big.attackTimer = big.attackTimer - dt
 
         enemy.turretRot = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
         local tankDistance = ((tank.y - enemy.y)^2 + (tank.x - enemy.x)^2)^0.5
@@ -63,6 +73,10 @@ local big = {}
             enemy.y = enemy.y + enemy.specifics.speed * math.sin(enemy.rot) * dt
         end
 
+        if big.attackTimer <= 0 then
+            big.attackTimer = math.random(100, 400) * 0.01
+            enemyBullets.big(tank.x, tank.y, enemy.x, enemy.y)
+        end
     end
 
 return big

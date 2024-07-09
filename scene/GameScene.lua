@@ -52,7 +52,7 @@ scene.update = function(dt)
     landMine.update(dt, explosion)
 
     enemies.Spawning(dt)
-    enemies.update(dt, tank)
+    enemies.update(dt, tank, explosion)
 
     explosion.update(dt)
     collisionCheck.bulletsTank(explosion, tank)
