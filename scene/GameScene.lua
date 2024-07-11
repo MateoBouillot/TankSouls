@@ -17,9 +17,9 @@ local collisionCheck = require("/mechanic/collisionsCheck")
 
 local roll = require("/mechanic/abilities/roll")
 local landMine = require("/mechanic/abilities/landMine")
+local stamina = require("/mechanic/stamina")
 
-scene.init = function(needInit)
-    if not needInit then return end
+scene.init = function()
     tank.init()
     explosion.init()
     enemies.init()
@@ -30,6 +30,8 @@ scene.init = function(needInit)
     sideCannons.init()
     tpShot.init()
     landMine.init()
+    stamina.init()
+    background.init()
 end
 
 scene.update = function(dt)
@@ -37,7 +39,7 @@ scene.update = function(dt)
         inputReading.movements(dt, tank.rotate, tank.move)
         inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons, tpShot)
         inputReading.cannonSwitch(tank)
-        inputReading.abilities(dt, roll.start, tank.rot, tank.x, tank.y, landMine.create)
+        inputReading.abilities(dt, roll.start, tank.rot, tank.x, tank.y, landMine, stamina)
     end
     
     bullet.update(dt)
@@ -50,30 +52,29 @@ scene.update = function(dt)
 
     roll.update(dt, tank)
     landMine.update(dt, explosion)
+    stamina.update(dt)
 
     enemies.Spawning(dt)
     enemies.update(dt, tank, explosion)
 
     explosion.update(dt)
     collisionCheck.bulletsTank(explosion, tank)
-    collisionCheck.tankBorder(tank, background.crateImg:getWidth(), explosion)
+    collisionCheck.tankBorder(tank, background.crateImg:getWidth(), explosion, "GAME")
+    tank.ifDeath(changeScene)
 end
 
 scene.draw = function()
-    background.draw()
+    background.draw("GAME")
     bullet.draw()
-    tank.draw()
+    tank.draw("GAME")
     enemies.draw()
     explosion.draw()
     landMine.draw()
+    stamina.draw()
 end
 
 scene.keypressed = function(key)
-    if key == "return" then
-        changeScene("MENU")
-    elseif key == "escape" then
-        changeScene("PAUSE", { false, score })
-    end
+
 end
 
 scene.unload = function()

@@ -33,6 +33,11 @@ local suicider = {}
             enemyType.exploding = false
             enemyType.explosionTimer = 2
             enemyType.exploded = false
+
+            enemyType.lifebar = {}
+                enemyType.lifebar.yShift = 20
+                enemyType.lifebar.width = 60
+                enemyType.lifebar.height = 10
         return enemyType
     end
 

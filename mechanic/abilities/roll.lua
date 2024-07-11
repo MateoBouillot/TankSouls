@@ -6,7 +6,9 @@ local roll = {}
     roll.iFrames = 0.2
     roll.iTimer = 0
 
-    roll.isRolling = false
+    roll.staminaUse = 40
+
+    isRolling = false
     roll.steps = "none"
 
     roll.axis = nil
@@ -15,9 +17,10 @@ local roll = {}
     roll.scaleChange = nil
     roll.placeChange = nil
 
-    roll.start = function(keypress, tankRot)
-        if roll.timer < 0 then
-            roll.isRolling = true
+    roll.start = function(keypress, tankRot, stamina)
+        if not isRolling and stamina.current >= roll.staminaUse then
+            stamina.use(roll.staminaUse)
+            isRolling = true
             roll.steps = "shrink"
 
             tankRot = tankRot % (2 * math.pi)
@@ -95,7 +98,7 @@ local roll = {}
                 if tank.scaleX >= 0.95 then
                     tank.scaleX = 1
                     tank.scaleY = 1
-                    roll.isRolling = false
+                    isRolling = false
                     roll.steps = "none"
                     roll.timer = roll.timeout
                 else
@@ -107,7 +110,7 @@ local roll = {}
                 if tank.scaleY >= 0.95 then
                     tank.scaleY = 1
                     tank.scaleX = 1
-                    roll.isRolling = false
+                    isRolling = false
                     roll.steps = "none"
                     roll.timer = roll.timeout
                 else

@@ -27,28 +27,62 @@ local collisionCheck = {}
             end
         end
         for i = #enemiesBullets, 1, -1 do
-            if CheckCollision(enemiesBullets[i].hitBox.x, enemiesBullets[i].hitBox.y, enemiesBullets[i].hitBox.W, 
-            enemiesBullets[i].hitBox.H, tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
-                local collisionX = enemiesBullets[i].hitBox.x + enemiesBullets[i].hitBox.W * 0.5
-                local collisionY = enemiesBullets[i].hitBox.y + enemiesBullets[i].hitBox.H * 0.5
+            if not isRolling then
+                if CheckCollision(enemiesBullets[i].hitBox.x, enemiesBullets[i].hitBox.y, enemiesBullets[i].hitBox.W, 
+                enemiesBullets[i].hitBox.H, tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
+                    local collisionX = enemiesBullets[i].hitBox.x + enemiesBullets[i].hitBox.W * 0.5
+                    local collisionY = enemiesBullets[i].hitBox.y + enemiesBullets[i].hitBox.H * 0.5
 
-                explosion.create(collisionX, collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
-                table.remove(enemiesBullets, i)
+                    explosion.create(collisionX, collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
+                    table.remove(enemiesBullets, i)
+                end
             end
         end
     end
 
-    collisionCheck.tankBorder = function(tank, borderWidth, explosion)
+    collisionCheck.tankBorder = function(tank, borderWidth, explosion, scene)
         if tank.x - tank.offsetX <= borderWidth then
-            tank.x = borderWidth + tank.offsetX    
+            if crateHitbox[3].destroyed and tank.y - tank.offsetY >= crateHitbox[3].y and tank.y <= crateHitbox[3].y + crateHitbox[3].height then
+                if tank.x <= 0 and scene == "MENU" then
+                    changeScene("ABTUTO", "left")
+                end
+            elseif  scene == "CANONTUTO" and tank.y - tank.offsetY >= crateHitbox[3].y and tank.y <= crateHitbox[3].y + crateHitbox[3].height then
+                if tank.x <= 0 then
+                    changeScene("MENU", "right")
+                end
+            else
+                tank.x = borderWidth + tank.offsetX    
+            end
         elseif tank.x + tank.offsetX >= love.graphics.getWidth() - borderWidth then
-            tank.x = love.graphics.getWidth() - borderWidth - tank.offsetX
+            if crateHitbox[4].destroyed and tank.y - tank.offsetY  >= crateHitbox[4].y and tank.y <= crateHitbox[4].y + crateHitbox[4].height then
+                if tank.x >= love.graphics.getWidth() and scene == "MENU" then
+                    changeScene("CANONTUTO", "right")
+                end
+            elseif scene == "ABTUTO"and tank.y - tank.offsetY  >= crateHitbox[4].y and tank.y <= crateHitbox[4].y + crateHitbox[4].height then
+                if tank.x >= love.graphics.getWidth() then
+                    changeScene("MENU", "left")
+                end
+            else
+                tank.x = love.graphics.getWidth() - borderWidth - tank.offsetX
+            end
         end
-   
         if tank.y - tank.offsetY <= borderWidth then
-            tank.y = borderWidth + tank.offsetY
+            if crateHitbox[1].destroyed and tank.x - tank.offsetX >= crateHitbox[1].x and tank.x + tank.offsetX <= crateHitbox[1].x + crateHitbox[1].width then
+                if tank.y <= 0 and scene == "MENU" then
+                    love.audio.stop()
+                    changeScene("GAME")
+                end
+            else
+                tank.y = borderWidth + tank.offsetY
+            end
         elseif tank.y + tank.offsetY >= love.graphics.getHeight() - borderWidth then
-            tank.y = love.graphics.getHeight() - borderWidth - tank.offsetY
+            if crateHitbox[2].destroyed and tank.x - tank.offsetX >= crateHitbox[2].x and tank.x + tank.offsetX <= crateHitbox[2].x + crateHitbox[2].width then
+                if tank.y >= love.graphics.getHeight() and scene == "MENU" then
+                    love.event.quit()
+                end
+            else
+                tank.y = love.graphics.getHeight() - borderWidth - tank.offsetY
+            end
         end
 
         for i = 1, #enemyList do
@@ -72,28 +106,28 @@ local collisionCheck = {}
             local collisionY = bullets[i].hitBox.y + bullets[i].hitBox.H * 0.5
 
             if bullets[i].x - (bullets[i].hitBox.W * 0.5) <= borderWidth then
-                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank.x, tank.y)
+                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank, tank.x, tank.y, scene)
                 if bullets[i].bulletType == "tpShot" then
                     tpShot.teleport("wall", tank, bullets[i].x, bullets[i].y)
                 end
                 table.remove(bullets, i)
 
             elseif bullets[i].x + (bullets[i].hitBox.W * 0.5) >= love.graphics.getWidth() - borderWidth then
-                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank.x, tank.y)
+                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank, tank.x, tank.y, scene)
                 if bullets[i].bulletType == "tpShot" then
                     tpShot.teleport("wall", tank, bullets[i].x, bullets[i].y)
                 end
                 table.remove(bullets, i)
 
             elseif bullets[i].y - (bullets[i].hitBox.H * 0.5) <= borderWidth then
-                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank.x, tank.y)
+                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank, tank.x, tank.y, scene)
                 if bullets[i].bulletType == "tpShot" then
                     tpShot.teleport("wall", tank, bullets[i].x, bullets[i].y)
                 end
                 table.remove(bullets, i)
 
             elseif bullets[i].y + (bullets[i].hitBox.H * 0.5) >= love.graphics.getHeight() - borderWidth then
-                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank.x, tank.y)
+                explosion.create(collisionX,collisionY, bullets[i].bulletType, tank, tank.x, tank.y, scene)
                 if bullets[i].bulletType == "tpShot" then
                     tpShot.teleport("wall", tank, bullets[i].x, bullets[i].y)
                 end
@@ -124,7 +158,7 @@ local collisionCheck = {}
         end
     end 
 
-    collisionCheck.explosionDamage = function(explo, tank)
+    collisionCheck.explosionDamage = function(explo, tank, scene)
         local baseExploHitBoxW = 100
         local baseExploHitBoxH = 100
 
@@ -134,7 +168,7 @@ local collisionCheck = {}
             exploHitBox.x = explo.x - exploHitBox.W * 0.5
             exploHitBox.y = explo.y - exploHitBox.H * 0.5
 
-        if explo.type == "enemyExplosion" then
+        if explo.type == "enemyExplosion" and not isRolling then
             if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
             tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
                 tank.hp = tank.hp - explo.damage
@@ -144,6 +178,15 @@ local collisionCheck = {}
                 if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
                 enemyList[i].hitBox.x, enemyList[i].hitBox.y, enemyList[i].hitBox.W, enemyList[i].hitBox.H) then
                     enemyList[i].specifics.hp = enemyList[i].specifics.hp - explo.damage
+                end
+            end
+        end
+
+        if scene == "MENU" then
+            for i = 1, #crateHitbox do
+                if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
+                    crateHitbox[i].x, crateHitbox[i].y, crateHitbox[i].width, crateHitbox[i].height) then
+                    crateHitbox[i].destroyed = true
                 end
             end
         end

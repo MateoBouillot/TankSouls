@@ -12,7 +12,7 @@ local offset = {}
     offset.turretx = 0
     offset.turrety = tankimg.baseTurret:getHeight() * 0.5 
 
-local tank = {}
+tank = {}
     tank.x = love.graphics.getWidth() * 0.5
     tank.y = love.graphics.getHeight() * 0.5
     tank.rot = 0
@@ -35,16 +35,30 @@ local tank = {}
     tank.sideCannon = false
     tank.level = 1
     tank.hp = 70
+    tank.maxHp = 70
 
     tank.hitBoxX = tank.x - tank.offsetX
     tank.hitBoxY = tank.y - tank.offsetY
     tank.hitBoxW = tank.sprite:getWidth()
     tank.hitBoxH = tank.sprite:getHeight()
 
-    tank.init = function()
-        tank.x = love.graphics.getWidth() * 0.5
+    tank.init = function(scene, dir)
+        if scene == "CANONTUTO" or dir == "left" then
+            tank.x = 20
+            
+        elseif scene == "ABTUTO" or dir == "right" then
+            tank.x = love.graphics.getWidth() - 20
+            tank.rot = math.pi
+        else
+            tank.x = love.graphics.getWidth() * 0.5
+            tank.rot = 0
+        end
         tank.y = love.graphics.getHeight() * 0.5
-        tank.rot = 0
+
+        if scene == "MENU" then
+            tank.cannonType = "oneTap"
+        end
+        
         tank.rotspeed = math.pi
         tank.speed = 300
         tank.turretRot = 0
@@ -106,7 +120,28 @@ local tank = {}
         tank.turretRot = math.atan2(y - tank.y, x - tank.x)
     end
 
-    tank.draw = function()
+    tank.ifDeath = function(changeScene)
+        if tank.hp <=0 then
+            love.audio.stop()
+            tank.hp = tank.maxHp
+            changeScene("MENU")
+        end
+    end
+
+    tank.lifebarW = 300
+    tank.lifebarH = 20
+    tank.lifebarX = 50
+    tank.lifebarY = 20
+
+    tank.draw = function(scene)
+        if scene == "GAME" then
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.rectangle("fill", tank.lifebarX, tank.lifebarY, tank.lifebarW, tank.lifebarH)
+            love.graphics.setColor(255, 0, 0)
+            local life = (tank.lifebarW * 0.01) * (tank.hp / (tank.maxHp * 0.01))
+            love.graphics.rectangle("fill", tank.lifebarX, tank.lifebarY, life, tank.lifebarH)
+            love.graphics.setColor(255, 255, 255)
+        end
         love.graphics.draw(tank.sprite, tank.x, tank.y, tank.rot, tank.scaleX, tank.scaleY, tank.offsetX, tank.offsetY)
         love.graphics.draw(tank.cannonImg, tank.x, tank.y, tank.turretRot, tank.scaleX, tank.scaleY, offset.turretx, offset.turrety)
     end

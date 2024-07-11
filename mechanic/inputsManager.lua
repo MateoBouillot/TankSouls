@@ -1,4 +1,4 @@
-
+local reloadSound = love.audio.newSource("/sounds/reloading.wav", "static")
 
 local inputReading = {}
 
@@ -42,12 +42,12 @@ local inputReading = {}
         end
     end
 
-    inputReading.abilities = function(dt, startRoll, tankRot, tankX, tankY, landMine)
+    inputReading.abilities = function(dt, startRoll, tankRot, tankX, tankY, landMine, stamina)
         if love.keyboard.isDown("lshift") then
             if love.keyboard.isDown("z") then
-                startRoll("z", tankRot)
+                startRoll("z", tankRot, stamina)
             elseif love.keyboard.isDown("s") then
-                startRoll("s", tankRot)
+                startRoll("s", tankRot, stamina)
             end
         end
 
@@ -98,6 +98,7 @@ local inputReading = {}
         if love.mouse.isDown(3) then
             if tank.cannonType == "rocket" then
                 if rocket.reloaded == false and rocket.reloading == false then
+                    reloadSound:play()
                     rocket.reloading = true
                     rocket.reloadTimer = rocket.reloadRate
                 end

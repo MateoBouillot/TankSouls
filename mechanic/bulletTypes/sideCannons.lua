@@ -1,3 +1,5 @@
+local shootSound = love.audio.newSource("/sounds/fullAuto.wav", "static")
+
 local img = {}
     img.greenFullAutoBullet = love.graphics.newImage("/img/Bullets/fullAutoBullets.png")
 
@@ -19,6 +21,8 @@ local sideCannons = {}
 
     sideCannons.create = function(tank)
         if sideCannons.timer <= 0 then
+            shootSound:stop()
+            shootSound:play()
             if tank.level == 3 then 
                 bullet.create(tank.x + math.cos(tank.rot + math.pi * 0.25),
                     tank.y + math.sin(tank.rot + math.pi * 0.25), 

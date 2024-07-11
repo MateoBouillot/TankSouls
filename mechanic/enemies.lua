@@ -112,9 +112,16 @@ local enemies = {}
 
     enemies.draw = function()
         for i = 1, #enemyList do
-            local e = enemyList[i]
+            local e = enemyList[i] 
+            love.graphics.setColor(0, 0, 0)
+            love.graphics.rectangle("fill", e.hitBox.x, e.hitBox.y - e.specifics.lifebar.yShift, e.specifics.lifebar.width, e.specifics.lifebar.height)
+            love.graphics.setColor(255, 0, 0)
+            local life = (e.specifics.lifebar.width * 0.01) * (e.specifics.hp / (e.specifics.maxHp * 0.01))
+            love.graphics.rectangle("fill", e.hitBox.x, e.hitBox.y - e.specifics.lifebar.yShift, life, e.specifics.lifebar.height)
+            love.graphics.setColor(255, 255, 255)
             love.graphics.draw(e.specifics.body, e.x, e.y, e.rot, e.specifics.bodyScale, e.specifics.bodyScale, e.specifics.bodyOffsetX, e.specifics.bodyOffsetY)
             love.graphics.draw(e.specifics.armament, e.x, e.y, e.turretRot, e.specifics.armamentScale, e.specifics.armamentScale, e.specifics.armamentOffsetX, e.specifics.armamentOffsetY)
+           
         end
     end
 return enemies

@@ -1,5 +1,10 @@
 local tpShot = require("/mechanic/abilities/tpShot")
 local collisionCheck = require("/mechanic/collisionsCheck")
+
+local exploSound = love.audio.newSource("/sounds/Explosion.wav", "static")
+exploSound:setVolume(0.3)
+local tpSound = love.audio.newSource("/sounds/teleportSound.wav", "static")
+
 local explosion = {}
 
     explosion.init = function()
@@ -43,7 +48,7 @@ local explosion = {}
         end
     end
 
-    explosion.create = function(x, y, type, tank, tankx, tanky)
+    explosion.create = function(x, y, type, tank, tankx, tanky, scene)
         local explo = {}
         if type == "basicBullet" then
             explo.scale = 0.6
@@ -95,7 +100,15 @@ local explosion = {}
         explo.y = y
         explo.imgNbr = 1
         explo.time = 1/explosion.frameRate
-        collisionCheck.explosionDamage(explo, tank)
+
+        if explo.type == "tp" then
+            tpSound:play()
+        else
+            exploSound:stop()
+            exploSound:play()
+        end
+
+        collisionCheck.explosionDamage(explo, tank, scene)
         table.insert(explosion.list, explo)
     end
 

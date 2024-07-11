@@ -30,6 +30,11 @@ local big = {}
             enemyType.hp = 50
             enemyType.damage = 20
             enemyType.maxHp = 50
+
+            enemyType.lifebar = {}
+            enemyType.lifebar.yShift = 40
+            enemyType.lifebar.width = 100
+            enemyType.lifebar.height = 10
         return enemyType
     end
 

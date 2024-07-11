@@ -1,3 +1,5 @@
+local shootSound = love.audio.newSource("/sounds/cannonShoot.wav", "static")
+shootSound:setVolume(0.5)
 local img = {}
     img.greenBullet = love.graphics.newImage("/img/Bullets/basicBullets.png")
 
@@ -18,6 +20,8 @@ local basicBullet = {}
 
     basicBullet.create = function(x, y, tankx, tanky)
         if basicBullet.timer <= 0 then
+            shootSound:stop()
+            shootSound:play()
             bullet.create(x, y, tankx, tanky, basicBullet.speed, offset, img.greenBullet, "basicBullet")
             basicBullet.timer = basicBullet.shootRate
         end

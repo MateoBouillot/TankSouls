@@ -1,3 +1,5 @@
+local shootSound = love.audio.newSource("/sounds/fullAuto.wav", "static")
+
 local img = {}
     img.greenFullAutoBullet = love.graphics.newImage("/img/Bullets/fullAutoBullets.png")
 
@@ -18,6 +20,8 @@ local fullAutoBullet = {}
 
     fullAutoBullet.create = function(x, y, tankx, tanky)
         if fullAutoBullet.timer <= 0 then
+            shootSound:stop()
+            shootSound:play()
             bullet.create(x, y, tankx, tanky, fullAutoBullet.speed, offset, img.greenFullAutoBullet, "fullAuto")
             fullAutoBullet.timer = fullAutoBullet.shootRate
         end

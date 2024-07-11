@@ -30,6 +30,11 @@ local sniper = {}
             enemyType.hp = 30
             enemyType.damage = 30
             enemyType.maxHp = 30
+
+            enemyType.lifebar = {}
+            enemyType.lifebar.yShift = 30
+            enemyType.lifebar.width = 80
+            enemyType.lifebar.height = 10
         return enemyType
     end
 

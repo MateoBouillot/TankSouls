@@ -1,3 +1,5 @@
+local shootSound = love.audio.newSource("/sounds/cannonShoot.wav", "static")
+
 local img = {}
     img.greenRocket = love.graphics.newImage("/img/Bullets/bigBullets.png")
 
@@ -20,6 +22,8 @@ local rocket = {}
 
     rocket.create = function(x, y, tankX, tankY)
         if rocket.reloaded == true then
+            shootSound:stop()
+            shootSound:play()
             bullet.create(x, y, tankX, tankY, rocket.speed, offset, img.greenRocket, "rocket")
             rocket.reloaded = false
         end
