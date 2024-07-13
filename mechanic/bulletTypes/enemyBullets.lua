@@ -1,4 +1,5 @@
 local shootSound = love.audio.newSource("/sounds/cannonShoot.wav", "static")
+shootSound:setVolume(0.3)
 local img = {}
     img.bigBullets = love.graphics.newImage("/img/Bullets/bigTankBullets.png")
     img.sniperBullets = love.graphics.newImage("/img/Bullets/sniperBullets.png")

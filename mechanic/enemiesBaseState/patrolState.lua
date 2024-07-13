@@ -42,15 +42,13 @@ local patrolState = function(dt, enemy, tank)
     local rotAim = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
     if rotAim < enemy.rot then direction = -1 end
 
-    if enemy.rot >= rotAim - (math.pi * 0.05) and enemy.rot <= rotAim + (math.pi * 0.05) then
-        enemy.rot = rotAim
-        enemy.x = enemy.x + enemy.specifics.speed * math.cos(rotAim) * dt
-        enemy.y = enemy.y + enemy.specifics.speed * math.sin(rotAim) * dt
-    elseif enemy.x >= enemy.target.x - 50 and enemy.x <= enemy.target.x + 50
+    if enemy.x >= enemy.target.x - 50 and enemy.x <= enemy.target.x + 50
     and enemy.y >= enemy.target.y - 50 and enemy.y <= enemy.target.y + 50 then
         enemy.target.isThere = false
     else
-        enemy.rot = enemy.rot + math.pi * dt * direction
+        enemy.rot = rotAim
+        enemy.x = enemy.x + enemy.specifics.speed * math.cos(rotAim) * dt
+        enemy.y = enemy.y + enemy.specifics.speed * math.sin(rotAim) * dt
     end
     enemy.turretRot = enemy.rot
 

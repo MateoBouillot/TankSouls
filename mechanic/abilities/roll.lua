@@ -1,3 +1,5 @@
+local dashSound = love.audio.newSource("/sounds/dash.wav", "static")
+dashSound:setVolume(0.5)
 local roll = {}
     roll.timeout = 3
     roll.timer = 0
@@ -22,6 +24,9 @@ local roll = {}
             stamina.use(roll.staminaUse)
             isRolling = true
             roll.steps = "shrink"
+
+            dashSound:stop()
+            dashSound:play()
 
             tankRot = tankRot % (2 * math.pi)
             if tankRot <= 0 then

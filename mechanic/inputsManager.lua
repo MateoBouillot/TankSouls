@@ -1,4 +1,9 @@
 local reloadSound = love.audio.newSource("/sounds/reloading.wav", "static")
+local shootSound = love.audio.newSource("/sounds/fullAuto.wav", "static")
+shootSound:setVolume(0.5)
+local tankMovingSound = love.audio.newSource("/sounds/TankMovingSound.wav", "static")
+tankMovingSound:setVolume(0.1)
+
 
 local inputReading = {}
 
@@ -36,9 +41,11 @@ local inputReading = {}
         end
     
         if love.keyboard.isDown("z") then
+            tankMovingSound:play()
             tankMove(dt, 1)
         elseif love.keyboard.isDown("s") then
             tankMove(dt, -1)
+            tankMovingSound:play()
         end
     end
 
@@ -72,6 +79,7 @@ local inputReading = {}
                 end
             elseif tank.cannonType == "fullAuto" then
                 fullAutoBullet.create(mouseX, mouseY, tank.x, tank.y)
+                shootSound:play()
             elseif tank.cannonType == "rocket" then
                 rocket.create(mouseX, mouseY, tank.x, tank.y)
             end

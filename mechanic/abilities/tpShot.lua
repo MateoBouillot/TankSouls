@@ -7,6 +7,8 @@ local offset = {}
 
 local bullet = require("/mechanic/Bullets")
 
+teleported = 0
+
 local tpShot = {}
     tpShot.speed = 900
     tpShot.shootRate = 3
@@ -25,6 +27,7 @@ local tpShot = {}
 
     tpShot.timerUpdate = function(dt)
         tpShot.timer = tpShot.timer - dt
+        teleported = teleported - dt
     end
 
     tpShot.teleport = function(target, tank, targetX, targetY, enemy)
@@ -33,11 +36,13 @@ local tpShot = {}
             tank.y = targetY
             
         elseif target == "enemy" then
-            enemy.x = tank.x
-            enemy.y = tank.y
+            enemyList[enemy].x = tank.lastPosX
+            enemyList[enemy].y = tank.lastPosY
             tank.x = targetX
             tank.y = targetY
         end
+
+        teleported = 0.5
     end
 
 return tpShot

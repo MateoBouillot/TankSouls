@@ -40,6 +40,7 @@ scene.update = function(dt)
         inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons, tpShot)
         inputReading.cannonSwitch(tank)
         inputReading.abilities(dt, roll.start, tank.rot, tank.x, tank.y, landMine, stamina)
+        collisionCheck.tankTank(dt)
     end
     
     bullet.update(dt)

@@ -34,8 +34,11 @@ tank = {}
 
     tank.sideCannon = false
     tank.level = 1
-    tank.hp = 70
-    tank.maxHp = 70
+    tank.hp = 7000
+    tank.maxHp = 7000
+
+    tank.lastPosX = 0
+    tank.lastPosY = 0
 
     tank.hitBoxX = tank.x - tank.offsetX
     tank.hitBoxY = tank.y - tank.offsetY
@@ -109,6 +112,8 @@ tank = {}
     end
 
     tank.move = function(dt, direction)
+        tank.lastPosX = tank.x
+        tank.lastPosY = tank.y
         tank.x = tank.x + tank.speed * math.cos(tank.rot) * dt * direction 
         tank.y = tank.y + tank.speed * math.sin(tank.rot) * dt * direction
 

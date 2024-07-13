@@ -19,7 +19,7 @@ local collisionCheck = {}
 
                     explosion.create(collisionX, collisionY, bullets[i].bulletType, tank, tank.x, tank.y)
                     if bullets[i].bulletType == "tpShot" then
-                        tpShot.teleport("enemy", tank, enemyList[e].x, enemyList[e].y, enemyList[e])
+                        tpShot.teleport("enemy", tank, enemyList[e].x, enemyList[e].y, e)
                     end
                     table.remove(bullets, i)
                     return
@@ -35,6 +35,36 @@ local collisionCheck = {}
 
                     explosion.create(collisionX, collisionY, enemiesBullets[i].bulletType, tank, tank.x, tank.y)
                     table.remove(enemiesBullets, i)
+                end
+            end
+        end
+    end
+
+    collisionCheck.tankTank = function(dt)
+        for i = 1, #enemyList do
+            if teleported <= 0 then
+                if CheckCollision(enemyList[i].hitBox.x, enemyList[i].hitBox.y, enemyList[i].hitBox.W, 
+                enemyList[i].hitBox.H, tank.hitBoxX, tank.hitBoxY, tank.hitBoxW, tank.hitBoxH) then
+                    local distanceX = enemyList[i].lastPosX - tank.lastPosX
+                    local distanceY = enemyList[i].lastPosY - tank.lastPosY
+                    enemyList[i].x = tank.x + distanceX
+                    enemyList[i].y = tank.y + distanceY
+                end
+            end
+
+            for e = 1, #enemyList do
+                if i ~= e then
+                    if CheckCollision(enemyList[i].hitBox.x, enemyList[i].hitBox.y, enemyList[i].hitBox.W, enemyList[i].hitBox.H,
+                    enemyList[e].hitBox.x, enemyList[e].hitBox.y, enemyList[e].hitBox.W, enemyList[e].hitBox.H) then
+                        
+                        enemyList[i].distanceY = enemyList[e].lastPosY - enemyList[i].lastPosY
+                        enemyList[i].distanceX = enemyList[e].lastPosX -  enemyList[i].lastPosX
+
+                        enemyList[i].dodgeAngle = math.atan2(enemyList[e].lastPosY - enemyList[i].lastPosY, enemyList[e].lastPosX -  enemyList[i].lastPosX)
+                        enemyList[i].dodging = 0.5
+
+                        enemyList[i].specifics.state = "dodge"
+                    end
                 end
             end
         end
@@ -178,6 +208,7 @@ local collisionCheck = {}
                 if CheckCollision(exploHitBox.x, exploHitBox.y, exploHitBox.W, exploHitBox.H,
                 enemyList[i].hitBox.x, enemyList[i].hitBox.y, enemyList[i].hitBox.W, enemyList[i].hitBox.H) then
                     enemyList[i].specifics.hp = enemyList[i].specifics.hp - explo.damage
+                    enemyList[i].specifics.state = "attack"
                 end
             end
         end

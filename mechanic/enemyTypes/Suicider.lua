@@ -11,6 +11,7 @@ local offset = {}
 
 local spawnState = require("/mechanic/enemiesBaseState/spawnState")
 local patrolState = require("/mechanic/enemiesBaseState/patrolState")
+local dodgeState = require("/mechanic/enemiesBaseState/dodgeState")
 
 local suicider = {}
 
@@ -49,6 +50,8 @@ local suicider = {}
         elseif enemy.specifics.state == "attack" then
             suicider.attackState(dt, enemy, tank)
             suicider.exploding(dt, enemy)
+        elseif enemy.specifics.state == "dodge" then
+            dodgeState(dt, enemy)
         end
     end
 

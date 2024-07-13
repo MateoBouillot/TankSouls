@@ -2,8 +2,9 @@ local tpShot = require("/mechanic/abilities/tpShot")
 local collisionCheck = require("/mechanic/collisionsCheck")
 
 local exploSound = love.audio.newSource("/sounds/Explosion.wav", "static")
-exploSound:setVolume(0.3)
+exploSound:setVolume(0.1)
 local tpSound = love.audio.newSource("/sounds/teleportSound.wav", "static")
+tpSound:setVolume(0.5)
 
 local explosion = {}
 
@@ -103,6 +104,8 @@ local explosion = {}
 
         if explo.type == "tp" then
             tpSound:play()
+        elseif explo.scale == 0.3 then
+
         else
             exploSound:stop()
             exploSound:play()

@@ -27,19 +27,26 @@ local enemies = {}
     enemies.randomRotTime = 0.01
     enemies.randomRotTimer = enemies.randomRotTime
     enemies.speed = 150
+    enemies.spawnSide = 1
 
     enemies.Spawning = function(dt)
         enemies.spawnTimer = enemies.spawnTimer - dt
         if enemies.spawnTimer <= 0 then
-            enemies.spawn()
+            
             enemies.spawnTimer = enemies.spawnTime
+            if enemies.spawnSide == 4 then
+                enemies.spawnSide = 1
+            else
+                enemies.spawnSide = enemies.spawnSide + 1
+            end
+            enemies.spawn()
         end
     end
     math.randomseed(os.time())
     enemies.spawn = function()
       if #enemyList == 5 then return end 
         local enemy = {}
-        enemies.spawnSide = math.random(1, 4)
+        
         if enemies.spawnSide == 1 then
             enemy.x = 0 - 30
             enemy.y = love.graphics.getHeight() * 0.5
@@ -67,6 +74,11 @@ local enemies = {}
 
         enemy.turretRot = enemy.rot
 
+        enemy.lastPosX = 0
+        enemy.lastPosY = 0
+
+        enemy.stuckTimer = 0
+
         enemy.spawnType = math.random(1, 3)
         if enemy.spawnType == 1 then
             enemy.specifics = suicider.spawn()
@@ -87,6 +99,9 @@ local enemies = {}
 
     enemies.update = function(dt, tank, explosion)
         for i = #enemyList, 1, -1 do
+            enemyList[i].lastPosX = enemyList[i].x
+            enemyList[i].lastPosY = enemyList[i].y
+
             if enemyList[i].specifics.type == "suicider" then
                 suicider.update(dt, enemyList[i], tank)
             elseif enemyList[i].specifics.type == "sniper" then
@@ -100,7 +115,7 @@ local enemies = {}
 
             if enemyList[i].specifics.exploded then
                 explosion.create(enemyList[i].x, enemyList[i].y, "tnt", tank)
-                table.remove(enemyList, i)
+                enemyList[i].specifics.hp = 0
             end
 
             if enemyList[i].specifics.hp <= 0 then

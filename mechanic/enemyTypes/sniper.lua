@@ -10,6 +10,7 @@ local offset = {}
 
 local spawnState = require("/mechanic/enemiesBaseState/spawnState")
 local patrolState = require("/mechanic/enemiesBaseState/patrolState")
+local dodgeState = require("/mechanic/enemiesBaseState/dodgeState")
 local enemyBullets = require("/mechanic/bulletTypes/enemyBullets")
 
 local sniper = {}
@@ -45,6 +46,8 @@ local sniper = {}
             patrolState(dt, enemy, tank)
         elseif enemy.specifics.state == "attack" then
             sniper.attackState(dt, enemy, tank)
+        elseif enemy.specifics.state == "dodge" then
+            dodgeState(dt, enemy)
         end
     end
 
