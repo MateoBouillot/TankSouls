@@ -19,6 +19,8 @@ local roll = require("/mechanic/abilities/roll")
 local landMine = require("/mechanic/abilities/landMine")
 local stamina = require("/mechanic/stamina")
 
+local waves = require("/mechanic/waves")
+
 scene.init = function()
     tank.init()
     explosion.init()
@@ -32,6 +34,7 @@ scene.init = function()
     landMine.init()
     stamina.init()
     background.init()
+    waves.init()
 end
 
 scene.update = function(dt)
@@ -55,8 +58,9 @@ scene.update = function(dt)
     landMine.update(dt, explosion)
     stamina.update(dt)
 
-    enemies.Spawning(dt)
+    waves.spawning(dt)
     enemies.update(dt, tank, explosion)
+    waves.winning(dt)
 
     explosion.update(dt)
     collisionCheck.bulletsTank(explosion, tank)
@@ -66,6 +70,7 @@ end
 
 scene.draw = function()
     background.draw("GAME")
+    waves.draw()
     bullet.draw()
     tank.draw("GAME")
     enemies.draw()

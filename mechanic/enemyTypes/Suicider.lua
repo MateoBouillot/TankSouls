@@ -66,8 +66,11 @@ local suicider = {}
         enemy.turretRot = enemy.rot
 
         suicider.tankDistance = ((enemy.target.y - enemy.y)^2 + (enemy.target.x - enemy.x)^2)^0.5
-        if suicider.tankDistance <= 150 then
+        if suicider.tankDistance <= 100 then
             enemy.specifics.exploding = true
+        end
+        if suicider.tankDistance >= 150 then
+            enemy.specifics.exploding = false
         end
     end 
 

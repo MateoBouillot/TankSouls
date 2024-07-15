@@ -22,31 +22,22 @@ local enemies = {}
     enemies.init = function()
         enemyList = {}
     end
-    enemies.spawnTime = 2
-    enemies.spawnTimer = enemies.spawnTime
+    
     enemies.randomRotTime = 0.01
     enemies.randomRotTimer = enemies.randomRotTime
     enemies.speed = 150
     enemies.spawnSide = 1
 
-    enemies.Spawning = function(dt)
-        enemies.spawnTimer = enemies.spawnTimer - dt
-        if enemies.spawnTimer <= 0 then
-            
-            enemies.spawnTimer = enemies.spawnTime
-            if enemies.spawnSide == 4 then
-                enemies.spawnSide = 1
-            else
-                enemies.spawnSide = enemies.spawnSide + 1
-            end
-            enemies.spawn()
-        end
-    end
-    math.randomseed(os.time())
-    enemies.spawn = function()
-      if #enemyList == 5 then return end 
+    enemies.spawn = function(spawnType)
+      if #enemyList == 10 then return end 
         local enemy = {}
-        
+
+        if enemies.spawnSide == 4 then
+            enemies.spawnSide = 1
+        else
+            enemies.spawnSide = enemies.spawnSide + 1
+        end
+
         if enemies.spawnSide == 1 then
             enemy.x = 0 - 30
             enemy.y = love.graphics.getHeight() * 0.5
@@ -79,12 +70,11 @@ local enemies = {}
 
         enemy.stuckTimer = 0
 
-        enemy.spawnType = math.random(1, 3)
-        if enemy.spawnType == 1 then
+        if spawnType == "suicider" then
             enemy.specifics = suicider.spawn()
-        elseif enemy.spawnType == 2 then
+        elseif spawnType == "big" then
             enemy.specifics = big.spawn()
-        elseif enemy.spawnType == 3 then
+        elseif spawnType == "sniper" then
             enemy.specifics = sniper.spawn()
         end
 
