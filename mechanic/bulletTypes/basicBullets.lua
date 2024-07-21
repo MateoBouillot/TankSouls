@@ -18,11 +18,11 @@ local basicBullet = {}
         basicBullet.timer = 0
     end
 
-    basicBullet.create = function(x, y, tankx, tanky)
+    basicBullet.create = function(x, y)
         if basicBullet.timer <= 0 then
             shootSound:stop()
             shootSound:play()
-            bullet.create(x, y, tankx, tanky, basicBullet.speed, offset, img.greenBullet, "basicBullet")
+            bullet.create(x, y, tank.x, tank.y, basicBullet.speed, offset, img.greenBullet, "basicBullet")
             basicBullet.timer = basicBullet.shootRate
         end
     end

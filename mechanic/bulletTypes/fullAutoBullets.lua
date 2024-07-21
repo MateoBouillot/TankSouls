@@ -18,9 +18,9 @@ local fullAutoBullet = {}
         fullAutoBullet.timer = 0
     end
 
-    fullAutoBullet.create = function(x, y, tankx, tanky)
+    fullAutoBullet.create = function(x, y)
         if fullAutoBullet.timer <= 0 then
-            bullet.create(x, y, tankx, tanky, fullAutoBullet.speed, offset, img.greenFullAutoBullet, "fullAuto")
+            bullet.create(x, y, tank.x, tank.y, fullAutoBullet.speed, offset, img.greenFullAutoBullet, "fullAuto")
             fullAutoBullet.timer = fullAutoBullet.shootRate
         end
     end

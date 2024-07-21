@@ -18,9 +18,9 @@ local tpShot = {}
         tpShot.timer = 0
     end
 
-    tpShot.create = function(x, y, tankx, tanky)
+    tpShot.create = function(x, y)
         if tpShot.timer <= 0 then
-            bullet.create(x, y, tankx, tanky, tpShot.speed, offset, img.tpBullet, "tpShot")
+            bullet.create(x, y, tank.x, tank.y, tpShot.speed, offset, img.tpBullet, "tpShot")
             tpShot.timer = tpShot.shootRate
         end
     end
@@ -30,7 +30,7 @@ local tpShot = {}
         teleported = teleported - dt
     end
 
-    tpShot.teleport = function(target, tank, targetX, targetY, enemy)
+    tpShot.teleport = function(target, targetX, targetY, enemy)
         if target == "wall" then
             tank.x = targetX
             tank.y = targetY

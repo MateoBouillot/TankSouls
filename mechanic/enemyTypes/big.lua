@@ -29,7 +29,6 @@ local big = {}
             enemyType.speed = 100
             enemyType.state = "spawning"
             enemyType.hp = 50
-            enemyType.damage = 20
             enemyType.maxHp = 50
 
             enemyType.lifebar = {}
@@ -39,13 +38,13 @@ local big = {}
         return enemyType
     end
 
-    big.update = function(dt, enemy, tank)
+    big.update = function(dt, enemy)
         if enemy.specifics.state == "spawning" then
             spawnState(dt, enemy)
         elseif enemy.specifics.state == "patrol" then
-            patrolState(dt, enemy, tank)
+            patrolState(dt, enemy)
         elseif enemy.specifics.state == "attack" then
-            big.attackState(dt, enemy, tank)
+            big.attackState(dt, enemy)
         elseif enemy.specifics.state == "dodge" then
             dodgeState(dt, enemy)
         end
@@ -53,7 +52,7 @@ local big = {}
 
     big.attackTimer = 0
 
-    big.attackState = function(dt, enemy, tank)
+    big.attackState = function(dt, enemy)
         math.randomseed(os.time())
         enemy.target.isThere = true
         enemy.target.x = tank.x
@@ -83,7 +82,7 @@ local big = {}
 
         if big.attackTimer <= 0 then
             big.attackTimer = math.random(100, 400) * 0.01
-            enemyBullets.big(tank.x, tank.y, enemy.x, enemy.y)
+            enemyBullets.big(enemy.x, enemy.y)
         end
     end
 

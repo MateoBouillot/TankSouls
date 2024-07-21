@@ -1,7 +1,6 @@
 local scene = {}
 
 local explosion = require("../mechanic/explosion")
-local tank = require("../mechanic/tank")
 local background = require("/mechanic/background")
 
 local basicBullet = require("../mechanic/bulletTypes/basicBullets")
@@ -27,9 +26,9 @@ end
 
 scene.update = function(dt)
     if not roll.isRolling then
-        inputReading.movements(dt, tank.rotate, tank.move)
-        inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons, tpShot)
-        inputReading.abilities(dt, roll.start, tank.rot, tank.x, tank.y, landMine, stamina)
+        inputReading.movements(dt)
+        inputReading.aimingShooting(dt, basicBullet, fullAutoBullet, rocket, tpShot)
+        inputReading.abilities(dt, roll.start, landMine, stamina)
     end
 
     bullet.update(dt)
@@ -37,12 +36,12 @@ scene.update = function(dt)
     tpShot.timerUpdate(dt)
     tank.spriteUpdate()
 
-    roll.update(dt, tank)
+    roll.update(dt)
     landMine.update(dt, explosion)
     stamina.update(dt)
 
     explosion.update(dt)
-    collisionCheck.tankBorder(tank, background.crateImg:getWidth(), explosion, "ABTUTO")
+    collisionCheck.tankBorder(background.crateImg:getWidth(), explosion, "ABTUTO")
 end
 
 scene.draw = function()

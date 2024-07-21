@@ -1,7 +1,6 @@
 local scenes = {}
 scenes.GAME = require("/scene/GameScene")
 scenes.MENU = require("/scene/MenuScenes/MenuScene")
-scenes.PAUSE = require("/scene/PauseScene")
 scenes.ABTUTO = require("/scene/MenuScenes/tutoAbilitiesScene")
 scenes.CANONTUTO = require("/scene/MenuScenes/tutoCannonsScene")
 
@@ -12,7 +11,6 @@ function changeScene(key, value)
         currentScene.unload()
     end
     currentScene = scenes[key]
-    print(value)
     currentScene.init(value)
 end
 

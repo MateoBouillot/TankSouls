@@ -14,10 +14,10 @@ local landMine = {}
         mine = {}
     end
 
-    landMine.create = function(x, y)
+    landMine.create = function()
         if landMine.refresh <= 0 then
-            mine.x = x
-            mine.y = y
+            mine.x = tank.x
+            mine.y = tank.y
 
             mine.off = landMine.offImg
             mine.on = landMine.onImg

@@ -12,17 +12,17 @@ local bullet = require("/mechanic/Bullets")
 
 local enemyBullets = {}
 
-    enemyBullets.sniper = function(x, y, enemyX, enemyY)
+    enemyBullets.sniper = function(enemyX, enemyY)
         local sniperBulletsSpeed = 900
         shootSound:stop()
         shootSound:play()
-        bullet.create(x, y, enemyX, enemyY, sniperBulletsSpeed, offset, img.sniperBullets, "sniperBullets")
+        bullet.create(tank.x, tank.y, enemyX, enemyY, sniperBulletsSpeed, offset, img.sniperBullets, "sniperBullets")
     end
 
-    enemyBullets.big = function(x, y, enemyX, enemyY)
+    enemyBullets.big = function(enemyX, enemyY)
         local bigBulletsSpeed = 700
         shootSound:stop()
         shootSound:play()
-        bullet.create(x, y, enemyX, enemyY, bigBulletsSpeed, offset, img.bigBullets, "bigBullets")
+        bullet.create(tank.x, tank.y, enemyX, enemyY, bigBulletsSpeed, offset, img.bigBullets, "bigBullets")
     end
 return enemyBullets

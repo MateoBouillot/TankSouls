@@ -1,9 +1,7 @@
 local tankimg = {}
     tankimg.bodyLv1 = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer1.png")
     tankimg.bodyLv2 = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer2.png")
-    tankimg.bodyLv2SideCannon = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer2Front.png")
     tankimg.bodyLv3 = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer3.png")
-    tankimg.bodyLv3SideCannon = love.graphics.newImage("/img/PlayerTank/tankBodyPlayer3FrontBack.png")
     tankimg.baseTurret = love.graphics.newImage("/img/cannons/oneTapCannons/baseCannon.png")
     tankimg.fullAutoTurret = love.graphics.newImage("/img/cannons/autoCannons/autoCannon.png")
     tankimg.rocketTurret = love.graphics.newImage("/img/cannons/bigRocketLauncher/bigCannon.png")
@@ -34,8 +32,8 @@ tank = {}
 
     tank.sideCannon = false
     tank.level = 1
-    tank.hp = 7000
-    tank.maxHp = 7000
+    tank.hp = 70
+    tank.maxHp = 70
 
     tank.lastPosX = 0
     tank.lastPosY = 0
@@ -65,6 +63,8 @@ tank = {}
         tank.rotspeed = math.pi
         tank.speed = 300
         tank.turretRot = 0
+        tank.level = 1
+        tank.hp = 70
     end
 
     tank.spriteUpdate = function()
@@ -73,26 +73,17 @@ tank = {}
             tank.sprite =  tankimg.bodyLv1
             tank.offsetX = tank.sprite:getWidth() * 0.5
             tank.offsetY = tank.sprite:getHeight() * 0.5
+            tank.maxHp = 70
         elseif tank.level == 2 then
-            if tank.sideCannon == true then
-                tank.sprite = tankimg.bodyLv2SideCannon
-                tank.offsetX = tank.sprite:getWidth() * 0.5
-                tank.offsetY = tank.sprite:getHeight() * 0.5
-            else
-                tank.sprite =  tankimg.bodyLv2
-                tank.offsetX = tank.sprite:getWidth() * 0.5
-                tank.offsetY = tank.sprite:getHeight() * 0.5
-            end
+            tank.sprite =  tankimg.bodyLv2
+            tank.offsetX = tank.sprite:getWidth() * 0.5
+            tank.offsetY = tank.sprite:getHeight() * 0.5
+            tank.maxHP = 100
         elseif tank.level == 3 then
-            if tank.sideCannon == true then
-                tank.sprite = tankimg.bodyLv3SideCannon
-                tank.offsetX = tank.sprite:getWidth() * 0.5
-                tank.offsetY = tank.sprite:getHeight() * 0.5
-            else
-                tank.sprite =  tankimg.bodyLv3
-                tank.offsetX = tank.sprite:getWidth() * 0.5
-                tank.offsetY = tank.sprite:getHeight() * 0.5
-            end
+            tank.maxHP = 130
+            tank.sprite =  tankimg.bodyLv3
+            tank.offsetX = tank.sprite:getWidth() * 0.5
+            tank.offsetY = tank.sprite:getHeight() * 0.5
         end
 
         if tank.cannonType == "oneTap" then
@@ -125,11 +116,11 @@ tank = {}
         tank.turretRot = math.atan2(y - tank.y, x - tank.x)
     end
 
-    tank.ifDeath = function(changeScene)
-        if tank.hp <=0 then
+    tank.ifDeath = function()
+        if tank.hp < 0 then
             love.audio.stop()
-            tank.hp = tank.maxHp
-            changeScene("MENU")
+            tank.dead = true
+            tank.hp = 0
         end
     end
 
@@ -149,6 +140,18 @@ tank = {}
         end
         love.graphics.draw(tank.sprite, tank.x, tank.y, tank.rot, tank.scaleX, tank.scaleY, tank.offsetX, tank.offsetY)
         love.graphics.draw(tank.cannonImg, tank.x, tank.y, tank.turretRot, tank.scaleX, tank.scaleY, offset.turretx, offset.turrety)
+        if tank.dead then
+            love.graphics.setColor(0, 0, 0, 0.3)
+            love.graphics.rectangle("fill", 0 , 0, love.graphics.getWidth(), love.graphics.getHeight())
+            love.graphics.setColor(0, 0, 0, 0.6)
+            love.graphics.rectangle("fill", 0 , love.graphics.getHeight() * 0.5 - 150, love.graphics.getWidth(), 300)
+            love.graphics.setColor(255, 0, 0)
+            love.graphics.setNewFont("/img/BlackOpsOne-Regular.ttf", 100)
+            love.graphics.print("You Died", love.graphics.getWidth() * 0.5 - 200, love.graphics.getHeight() * 0.5 - 50)
+            love.graphics.setColor(255, 255, 255)
+            love.graphics.setNewFont("/img/BlackOpsOne-Regular.ttf", 20)
+            love.graphics.print("press Space to return to menu", love.graphics.getWidth() * 0.5 - 150, love.graphics.getHeight() - 300)
+        end
     end
 
 return tank

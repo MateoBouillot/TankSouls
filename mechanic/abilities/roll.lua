@@ -19,7 +19,7 @@ local roll = {}
     roll.scaleChange = nil
     roll.placeChange = nil
 
-    roll.start = function(keypress, tankRot, stamina)
+    roll.start = function(keypress, stamina)
         if not isRolling and stamina.current >= roll.staminaUse then
             stamina.use(roll.staminaUse)
             isRolling = true
@@ -28,21 +28,21 @@ local roll = {}
             dashSound:stop()
             dashSound:play()
 
-            tankRot = tankRot % (2 * math.pi)
-            if tankRot <= 0 then
-                tankRot = 2 * math.pi + tankRot
+            tank.rot = tank.rot % (2 * math.pi)
+            if tank.rot <= 0 then
+                tank.rot = 2 * math.pi + tank.rot
             end
             
 
-            if tankRot <= 3 * math.pi * 0.25 and tankRot >= math.pi * 0.25 then
+            if tank.rot <= 3 * math.pi * 0.25 and tank.rot >= math.pi * 0.25 then
                 roll.Dir = 1
                 roll.axis = "y"
 
-            elseif tankRot <= 7 * math.pi * 0.25 and tankRot >= 5 * math.pi * 0.25 then
+            elseif tank.rot <= 7 * math.pi * 0.25 and tank.rot >= 5 * math.pi * 0.25 then
                 roll.Dir = -1
                 roll.axis = "y"
 
-            elseif tankRot < 5 * math.pi * 0.25 and tankRot > 3 * math.pi * 0.25 then
+            elseif tank.rot < 5 * math.pi * 0.25 and tank.rot > 3 * math.pi * 0.25 then
                 roll.Dir = -1
                 roll.axis = "x"
 
@@ -57,7 +57,7 @@ local roll = {}
         end
     end
 
-    roll.update = function(dt, tank)
+    roll.update = function(dt)
         roll.timer = roll.timer - dt
 
         if roll.steps == "shrink" then

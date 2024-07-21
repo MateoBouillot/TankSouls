@@ -2,14 +2,12 @@ local scene = {}
 
 local explosion = require("../mechanic/explosion")
 local background = require("/mechanic/background")
-local tank = require("../mechanic/tank")
 local enemies = require("../mechanic/enemies")
 
 local basicBullet = require("../mechanic/bulletTypes/basicBullets")
 local fullAutoBullet = require("/mechanic/bulletTypes/fullAutoBullets")
 local tpShot = require("/mechanic/abilities/tpShot")
 local rocket = require("/mechanic/bulletTypes/rocket")
-local sideCannons = require("/mechanic/bulletTypes/sideCannons")
 local bullet = require("/mechanic/Bullets")
 
 local inputReading = require("/mechanic/inputsManager")
@@ -29,7 +27,6 @@ scene.init = function()
     basicBullet.init()
     fullAutoBullet.init()
     rocket.init()
-    sideCannons.init()
     tpShot.init()
     landMine.init()
     stamina.init()
@@ -39,44 +36,47 @@ end
 
 scene.update = function(dt)
     if not roll.isRolling then
-        inputReading.movements(dt, tank.rotate, tank.move)
-        inputReading.aimingShooting(dt, tank, basicBullet, fullAutoBullet, rocket, sideCannons, tpShot)
-        inputReading.cannonSwitch(tank)
-        inputReading.abilities(dt, roll.start, tank.rot, tank.x, tank.y, landMine, stamina)
-        collisionCheck.tankTank(dt)
+        inputReading.movements(dt)
+        if not tank.dead then
+            inputReading.aimingShooting(dt, basicBullet, fullAutoBullet, rocket, tpShot)
+            inputReading.cannonSwitch(tank)
+            inputReading.abilities(dt, roll.start, landMine, stamina)
+            collisionCheck.tankTank(dt)
+        end
     end
-    
-    bullet.update(dt)
-    basicBullet.timerUpdate(dt)
-    fullAutoBullet.timerUpdate(dt)
-    rocket.reloadUpdate(dt)
-    sideCannons.timerUpdate(dt)
-    tpShot.timerUpdate(dt)
-    tank.spriteUpdate()
+     if not tank.dead then    
+        bullet.update(dt)
+        basicBullet.timerUpdate(dt)
+        fullAutoBullet.timerUpdate(dt)
+        rocket.reloadUpdate(dt)
+        tpShot.timerUpdate(dt)
+        tank.spriteUpdate()
 
-    roll.update(dt, tank)
-    landMine.update(dt, explosion)
-    stamina.update(dt)
+        roll.update(dt)
+        landMine.update(dt, explosion)
+        stamina.update(dt)
 
-    waves.spawning(dt)
-    enemies.update(dt, tank, explosion)
-    waves.winning(dt)
+        waves.spawning(dt)
+        enemies.update(dt, explosion)
+        waves.winning(dt)
 
-    explosion.update(dt)
-    collisionCheck.bulletsTank(explosion, tank)
-    collisionCheck.tankBorder(tank, background.crateImg:getWidth(), explosion, "GAME")
-    tank.ifDeath(changeScene)
+        explosion.update(dt)
+        collisionCheck.bulletsTank(explosion)
+        collisionCheck.tankBorder(background.crateImg:getWidth(), explosion, "GAME")
+        collisionCheck.rewards(waves, explosion)
+        tank.ifDeath()
+    end
 end
 
 scene.draw = function()
     background.draw("GAME")
     waves.draw()
     bullet.draw()
-    tank.draw("GAME")
     enemies.draw()
     explosion.draw()
     landMine.draw()
     stamina.draw()
+    tank.draw("GAME")
 end
 
 scene.keypressed = function(key)

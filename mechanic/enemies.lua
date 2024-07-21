@@ -32,6 +32,8 @@ local enemies = {}
       if #enemyList == 10 then return end 
         local enemy = {}
 
+        -- setup spawn Side
+
         if enemies.spawnSide == 4 then
             enemies.spawnSide = 1
         else
@@ -56,6 +58,8 @@ local enemies = {}
             enemy.rot = 3 * math.pi * 0.5
         end
         enemy.spawnSide = enemies.spawnSide
+
+        -- setup spawn specifics
 
         enemy.target = {
             isThere = false,
@@ -87,24 +91,24 @@ local enemies = {}
         table.insert(enemyList, enemy)
     end
 
-    enemies.update = function(dt, tank, explosion)
+    enemies.update = function(dt, explosion)
         for i = #enemyList, 1, -1 do
             enemyList[i].lastPosX = enemyList[i].x
             enemyList[i].lastPosY = enemyList[i].y
 
             if enemyList[i].specifics.type == "suicider" then
-                suicider.update(dt, enemyList[i], tank)
+                suicider.update(dt, enemyList[i])
             elseif enemyList[i].specifics.type == "sniper" then
-                sniper.update(dt, enemyList[i], tank)
+                sniper.update(dt, enemyList[i])
             elseif enemyList[i].specifics.type == "big" then
-                big.update(dt, enemyList[i], tank)
+                big.update(dt, enemyList[i])
             end
 
             enemyList[i].hitBox.x = enemyList[i].x - enemyList[i].specifics.body:getWidth() * 0.5
             enemyList[i].hitBox.y = enemyList[i].y - enemyList[i].specifics.body:getHeight() * 0.5
 
             if enemyList[i].specifics.exploded then
-                explosion.create(enemyList[i].x, enemyList[i].y, "tnt", tank)
+                explosion.create(enemyList[i].x, enemyList[i].y, "tnt")
                 enemyList[i].specifics.hp = 0
             end
 

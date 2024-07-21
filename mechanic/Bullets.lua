@@ -6,13 +6,11 @@ local bullet = {}
 
     bullet.init = function()
         bullets = {}
+        enemiesBullets = {}
     end
 
-    bullet.create = function(aimX, aimY, tankx, tanky, bulletSpeed, offset, bulletImg, bulletType)
-            local angle = math.atan2((aimY - tanky), (aimX - tankx))
-
-            local startX = tankx + (tank.cannonLength * math.cos(angle))
-            local startY = tanky + (tank.cannonLength * math.sin(angle))
+    bullet.create = function(aimX, aimY, startX, startY, bulletSpeed, offset, bulletImg, bulletType)
+            local angle = math.atan2((aimY - startY), (aimX - startX))
             
             local bulletSpeedX = bulletSpeed * math.cos(angle)
             local bulletSpeedY = bulletSpeed * math.sin(angle)

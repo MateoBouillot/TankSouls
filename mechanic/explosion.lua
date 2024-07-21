@@ -49,7 +49,7 @@ local explosion = {}
         end
     end
 
-    explosion.create = function(x, y, type, tank, tankx, tanky, scene)
+    explosion.create = function(x, y, type, scene)
         local explo = {}
         if type == "basicBullet" then
             explo.scale = 0.6
@@ -70,8 +70,8 @@ local explosion = {}
             explo.scale = 1.5
             explo.img = orangePortals
             explo.type = "tp"
-            explo.bluePortalX = tankx
-            explo.bluePortalY = tanky
+            explo.bluePortalX = tank.x
+            explo.bluePortalY = tank.y
         elseif type == "mine" then
             explo.scale = 2
             explo.img = explosionImg
@@ -111,7 +111,7 @@ local explosion = {}
             exploSound:play()
         end
 
-        collisionCheck.explosionDamage(explo, tank, scene)
+        collisionCheck.explosionDamage(explo, scene)
         table.insert(explosion.list, explo)
     end
 

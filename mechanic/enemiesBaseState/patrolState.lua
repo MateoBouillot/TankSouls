@@ -1,4 +1,4 @@
-local patrolState = function(dt, enemy, tank)
+local patrolState = function(dt, enemy)
     math.randomseed(os.time())
 
     local targets = {}
@@ -35,12 +35,9 @@ local patrolState = function(dt, enemy, tank)
         elseif target == 4 then
             enemy.target = targets.four
         end
-        print(target)
     end
 
-    local direction = 1
     local rotAim = math.atan2(enemy.target.y - enemy.y, enemy.target.x - enemy.x)
-    if rotAim < enemy.rot then direction = -1 end
 
     if enemy.x >= enemy.target.x - 50 and enemy.x <= enemy.target.x + 50
     and enemy.y >= enemy.target.y - 50 and enemy.y <= enemy.target.y + 50 then

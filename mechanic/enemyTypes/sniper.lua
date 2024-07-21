@@ -28,9 +28,8 @@ local sniper = {}
             enemyType.armamentScale = 1
             enemyType.speed = 150
             enemyType.state = "spawning"
-            enemyType.hp = 30
-            enemyType.damage = 30
-            enemyType.maxHp = 30
+            enemyType.hp = 40
+            enemyType.maxHp = 40
 
             enemyType.lifebar = {}
             enemyType.lifebar.yShift = 30
@@ -39,13 +38,13 @@ local sniper = {}
         return enemyType
     end
 
-    sniper.update = function(dt, enemy, tank)
+    sniper.update = function(dt, enemy)
         if enemy.specifics.state == "spawning" then
             spawnState(dt, enemy)
         elseif enemy.specifics.state == "patrol" then
-            patrolState(dt, enemy, tank)
+            patrolState(dt, enemy)
         elseif enemy.specifics.state == "attack" then
-            sniper.attackState(dt, enemy, tank)
+            sniper.attackState(dt, enemy)
         elseif enemy.specifics.state == "dodge" then
             dodgeState(dt, enemy)
         end
@@ -53,7 +52,7 @@ local sniper = {}
 
     sniper.attackTimer = 0
 
-    sniper.attackState = function(dt, enemy, tank)
+    sniper.attackState = function(dt, enemy)
         math.randomseed(os.time())
         enemy.target.isThere = true
         enemy.target.x = tank.x
@@ -82,7 +81,7 @@ local sniper = {}
 
         if sniper.attackTimer <= 0 then
             sniper.attackTimer = math.random(200, 400) * 0.01
-            enemyBullets.sniper(tank.x, tank.y, enemy.x, enemy.y)
+            enemyBullets.sniper(enemy.x, enemy.y)
         end
     end
 

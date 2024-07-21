@@ -20,11 +20,11 @@ local rocket = {}
         rocket.reloaded = true
     end
 
-    rocket.create = function(x, y, tankX, tankY)
+    rocket.create = function(x, y)
         if rocket.reloaded == true then
             shootSound:stop()
             shootSound:play()
-            bullet.create(x, y, tankX, tankY, rocket.speed, offset, img.greenRocket, "rocket")
+            bullet.create(x, y, tank.x, tank.y, rocket.speed, offset, img.greenRocket, "rocket")
             rocket.reloaded = false
         end
     end

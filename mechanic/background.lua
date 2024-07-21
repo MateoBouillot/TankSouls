@@ -1,7 +1,6 @@
 local music = {}
     music.menu = love.audio.newSource("/sounds/music/MenuMusic.wav", "stream")
     music.inGame = love.audio.newSource("/sounds/music/inGameMusic.wav", "stream")
-    music.boss = love.audio.newSource("/sounds/music/BossFightMusic.wav", "stream")
 
 local background = {}
     background.groundImg = love.graphics.newImage("img/bg/dirt.png")
@@ -60,14 +59,17 @@ local background = {}
         end
     end
 
-    
-
     background.draw = function(scene)
+
+        -- ground drawing
+
         for i = 1, background.width do
             for u = 1, background.height do
                 love.graphics.draw(background.groundImg, (i - 1) * 128, (u - 1) * 128)
             end
         end
+
+        -- barricade drawing
 
         for i = 1, (love.graphics.getWidth() / background.barricadeImg:getWidth()) do
             if i < (love.graphics.getWidth() / background.barricadeImg:getWidth()) * 0.5 + 1 and i > (love.graphics.getWidth() / background.barricadeImg:getWidth()) * 0.5 - 2.5 then
@@ -107,6 +109,8 @@ local background = {}
                 love.graphics.draw(background.barricadeImg, love.graphics.getWidth() - background.barricadeImg:getWidth(), (i - 1) * (background.barricadeImg:getHeight() + 0.7))
             end
         end
+
+        -- menu writing
 
         if scene == "MENU" then
             love.graphics.setNewFont("/img/BlackOpsOne-Regular.ttf", 100)
@@ -159,10 +163,8 @@ local background = {}
             love.graphics.print("it will take 10 seconds to recharge", 480, 850)
         end
 
-        if scene == "GAME" then
+        if scene == "GAME" and not tank.dead then
             music.inGame:play()
-        elseif scen == "BOSS" then
-            music.boss:play()
         else
             music.menu:play()
         end

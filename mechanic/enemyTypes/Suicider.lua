@@ -29,7 +29,6 @@ local suicider = {}
             enemyType.speed = 200
             enemyType.state = "spawning"
             enemyType.hp = 20
-            enemyType.damage = 40
             enemyType.maxHp = 20
             enemyType.exploding = false
             enemyType.explosionTimer = 2
@@ -42,20 +41,20 @@ local suicider = {}
         return enemyType
     end
 
-    suicider.update = function(dt, enemy, tank)
+    suicider.update = function(dt, enemy)
         if enemy.specifics.state == "spawning" then
             spawnState(dt, enemy)
         elseif enemy.specifics.state == "patrol" then
-            patrolState(dt, enemy, tank)
+            patrolState(dt, enemy)
         elseif enemy.specifics.state == "attack" then
-            suicider.attackState(dt, enemy, tank)
+            suicider.attackState(dt, enemy)
             suicider.exploding(dt, enemy)
         elseif enemy.specifics.state == "dodge" then
             dodgeState(dt, enemy)
         end
     end
 
-    suicider.attackState = function(dt, enemy, tank)
+    suicider.attackState = function(dt, enemy)
         enemy.target.isThere = true
         enemy.target.x = tank.x
         enemy.target.y = tank.y
